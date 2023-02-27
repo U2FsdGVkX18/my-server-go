@@ -1,4 +1,4 @@
-package wxbizjsonmsgcrypt
+package wxmsgcrypt
 
 import (
 	"bytes"

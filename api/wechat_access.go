@@ -3,8 +3,8 @@ package api
 import (
 	"encoding/xml"
 	"github.com/gin-gonic/gin"
-	"log"
-	"my-server-go/commons/tools/wechataes/wxbizjsonmsgcrypt"
+	"my-server-go/commons/tools/log"
+	"my-server-go/commons/tools/wechataes/wxmsgcrypt"
 	"net/http"
 )
 
@@ -21,11 +21,6 @@ type WeChatReqMsgInfo struct {
 	Encrypt    string   `xml:"Encrypt"`
 }
 
-func init() {
-	log.SetPrefix("log : ")
-	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-}
-
 func WeChatAccess(ginServer *gin.Engine) {
 	var wechatGroup = ginServer.Group("/wechat")
 	{
@@ -35,7 +30,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 			var nonce = context.Query("nonce")
 			var echostr = context.Query("echostr")
 			//log
-			log.Println("接口参数为:", msg_signature, timestamp, nonce, echostr)
+			log.Write("接口参数为:", msg_signature, timestamp, nonce, echostr)
 			//验证URL
 			echoStr := VerifyUrl(msg_signature, timestamp, nonce, echostr)
 			context.String(http.StatusOK, echoStr)
@@ -46,7 +41,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 			var nonce = context.Query("nonce")
 			data, _ := context.GetRawData()
 			//log
-			log.Println("接口参数为:", msg_signature, timestamp_string, nonce, data)
+			log.Write("接口参数为:", msg_signature, timestamp_string, nonce, data)
 			//将string -> int
 			//timestamp, _ := strconv.Atoi(timestamp_string)
 			//处理消息
@@ -56,12 +51,12 @@ func WeChatAccess(ginServer *gin.Engine) {
 }
 
 func VerifyUrl(msg_signature string, timestamp string, nonce string, echostr string) string {
-	wxcpt := wxbizjsonmsgcrypt.NewWXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID, wxbizjsonmsgcrypt.JsonType)
+	wxcpt := wxmsgcrypt.NewWXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID, wxmsgcrypt.JsonType)
 	echoStr, cryptError := wxcpt.VerifyURL(msg_signature, timestamp, nonce, echostr)
 	if cryptError != nil {
-		log.Println("验证失败!")
+		log.Write("验证失败!")
 	}
-	log.Println("验证成功!", echoStr)
+	log.Write("验证成功!", echoStr)
 	return string(echoStr)
 }
 

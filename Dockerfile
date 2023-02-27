@@ -5,5 +5,5 @@ COPY go.mod go.sum ./
 RUN go env -w GOPROXY=https://goproxy.cn
 RUN go mod download && go mod verify
 COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+RUN go build -v -o /usr/local/bin/app/my-server-go ./...
 CMD ["app"]

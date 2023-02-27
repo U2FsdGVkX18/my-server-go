@@ -47,6 +47,10 @@ func WeChatAccess(ginServer *gin.Engine) {
 			//处理消息
 			//GetMessage(msg_signature, timestamp, nonce, data)
 		})
+		wechatGroup.GET("/test", func(context *gin.Context) {
+			log.Write("日志打印")
+			context.String(http.StatusOK, "asdasdasdasdasdasd")
+		})
 	}
 }
 

@@ -47,10 +47,6 @@ func WeChatAccess(ginServer *gin.Engine) {
 			//处理消息
 			//GetMessage(msg_signature, timestamp, nonce, data)
 		})
-		wechatGroup.GET("/test", func(context *gin.Context) {
-			log.Write("日志打印")
-			context.String(http.StatusOK, "asdasdasdasdasdasd")
-		})
 	}
 }
 
@@ -58,9 +54,9 @@ func VerifyUrl(msg_signature string, timestamp string, nonce string, echostr str
 	wxcpt := wxmsgcrypt.NewWXBizMsgCrypt(sToken, sEncodingAESKey, sCorpID, wxmsgcrypt.JsonType)
 	echoStr, cryptError := wxcpt.VerifyURL(msg_signature, timestamp, nonce, echostr)
 	if cryptError != nil {
-		log.Write("验证失败!")
+		log.Write("验证失败!", cryptError)
 	}
-	log.Write("验证成功!", echoStr)
+	log.Write("验证成功!", string(echoStr))
 	return string(echoStr)
 }
 

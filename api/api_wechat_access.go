@@ -77,9 +77,8 @@ func ProcessMessage(msg_signature string, timestamp string, nonce string, post_d
 		logger.Write("ProcessMessage 消息处理失败!", cryptError)
 	}
 
-	//创建新的对象
+	//创建对象
 	var msgContent MsgContent
-
 	err := json.Unmarshal(msg, &msgContent)
 	if err != nil {
 		log.Println("ProcessMessage 消息解析失败!", err)

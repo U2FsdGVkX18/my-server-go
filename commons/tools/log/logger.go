@@ -6,7 +6,7 @@ import (
 )
 
 func Write(any ...any) {
-	file, err := os.OpenFile("server.log", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0664)
+	file, err := os.OpenFile("log/server.log", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0664)
 	if err != nil {
 		return
 	}

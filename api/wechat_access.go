@@ -41,7 +41,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 			var nonce = context.Query("nonce")
 			data, _ := context.GetRawData()
 			//log
-			log.Write("接口参数为:", msg_signature, timestamp_string, nonce, data)
+			log.Write("接口参数为:", msg_signature, timestamp_string, nonce, string(data))
 			//将string -> int
 			//timestamp, _ := strconv.Atoi(timestamp_string)
 			//处理消息

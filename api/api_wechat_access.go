@@ -74,7 +74,7 @@ func ProcessMessage(msg_signature string, timestamp string, nonce string, post_d
 	msg, cryptError := wxcpt.DecryptMsg(msg_signature, timestamp, nonce, post_data)
 	if cryptError != nil {
 		log.Println("ProcessMessage 消息处理失败!", cryptError)
-		logger.Write("ProcessMessage 消息处理失败!", cryptError)
+		logger.Write("ProcessMessage 消息处理失败!", &cryptError)
 	}
 
 	//创建对象

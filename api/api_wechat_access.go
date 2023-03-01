@@ -5,8 +5,8 @@ import (
 	"encoding/xml"
 	"github.com/gin-gonic/gin"
 	"log"
-	logger "my-server-go/commons/tools/log"
-	"my-server-go/commons/tools/wechataes/wxmsgcrypt"
+	logger "my-server-go/tool/log"
+	"my-server-go/tool/wechataes/wxmsgcrypt"
 	"net/http"
 )
 

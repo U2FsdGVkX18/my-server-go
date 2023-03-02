@@ -137,10 +137,10 @@ func ProcessMessage(msg_signature string, timestamp string, nonce string, post_d
 
 type WeChatPassiveRespMsgInfo struct {
 	XMLName      xml.Name `xml:"xml"`
-	Encrypt      string   `xml:"encrypt" json:"Encrypt"`
-	MsgSignature string   `xml:"msgSignature" json:"MsgSignature"`
-	TimeStamp    string   `xml:"timeStamp" json:"TimeStamp"`
-	Nonce        string   `xml:"nonce" json:"Nonce"`
+	Encrypt      string   `xml:"Encrypt" json:"Encrypt"`
+	MsgSignature string   `xml:"MsgSignature" json:"MsgSignature"`
+	TimeStamp    string   `xml:"TimeStamp" json:"TimeStamp"`
+	Nonce        string   `xml:"Nonce" json:"Nonce"`
 }
 
 // CreatePassiveRespText 构造被动消息

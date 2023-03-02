@@ -1,7 +1,9 @@
 package test
 
 import (
+	"fmt"
 	"my-server-go/api"
+	"my-server-go/invoke/wx"
 	"testing"
 )
 
@@ -15,4 +17,13 @@ func TestOne(t *testing.T) {
 
 func TestTwo(t *testing.T) {
 	api.CreatePassiveRespText("lihongwei", "123123123", "nonce", "1")
+}
+
+func Test3(t *testing.T) {
+	token := wx.GetAccessToken()
+	fmt.Println(token)
+}
+
+func Test4(t *testing.T) {
+	wx.SendWxMessage("2312312312")
 }

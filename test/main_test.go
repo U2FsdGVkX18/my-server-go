@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"my-server-go/api"
 	"my-server-go/config/mysql"
+	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
+	"my-server-go/invoke/xinzhi"
 	"testing"
 )
 
@@ -33,6 +35,7 @@ func Test5(t *testing.T) {
 	db := mysql.Connect()
 	//var qywx mysql.QywxUserLocation
 	//result := db.Where("user_name", "lihongwei").First(&mysql.QywxUserLocation{})
+	//result := db.Where("user_name", "LiHongWei").Find(&mysql.QywxUserLocation{})
 	//fmt.Println(result.RowsAffected)
 	//db.Create(&mysql.QywxUserLocation{
 	//	UserName:     "lihongwei",
@@ -42,6 +45,19 @@ func Test5(t *testing.T) {
 	//	UserName:     "lihongwei",
 	//	UserLocation: "location",
 	//})
-	result := db.Where("user_name", "lihongwei").Update("user_location", "1211111:22")
+	result := db.Model(&mysql.QywxUserLocation{}).Where("user_name", "LiHongWei").Update("user_location", "asdasd")
+
+	//result := db.Where("user_name", "lihongwei").Update("user_location", "1211111:22")
 	fmt.Println(result.RowsAffected)
+}
+
+func Test6(t *testing.T) {
+
+	daily := xinzhi.GetWeatherDaily("30.292601:120.039001")
+	fmt.Println(daily)
+}
+
+func Test7(t *testing.T) {
+	str := tianxing.SentenceOfTheDay()
+	fmt.Println(str)
 }

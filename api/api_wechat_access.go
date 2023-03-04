@@ -138,14 +138,14 @@ func ProcessMessage(msg_signature string, timestamp string, nonce string, post_d
 			if result.RowsAffected == 1 {
 				//更新
 				db.Model(&mysql.QywxUserLocation{}).Where("user_name", username).Update("user_location", location)
-				logger.Write("查询到用户和位置数据已存在,更新位置数据:", username)
+				logger.Write("ProcessMessage 查询到用户和位置数据已存在,更新位置数据:", username)
 			} else {
 				//插入
 				db.Create(&mysql.QywxUserLocation{
 					UserName:     username,
 					UserLocation: location,
 				})
-				logger.Write("查询到用户和位置数据不存在,插入位置数据:{}", username)
+				logger.Write("ProcessMessage 查询到用户和位置数据不存在,插入位置数据:", username)
 			}
 			logger.Write("ProcessMessage 检测到机器人接收到的位置信息:", Latitude, Longitude)
 		}

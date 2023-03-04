@@ -3,7 +3,9 @@ package api
 import (
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"my-server-go/config/mysql"
 	logger "my-server-go/tool/log"
 	"my-server-go/tool/wechataes"
 	"net/http"
@@ -127,8 +129,24 @@ func ProcessMessage(msg_signature string, timestamp string, nonce string, post_d
 		}
 	case "event":
 		if msgContent.Event == "LOCATION" {
-			var Latitude = msgContent.Latitude
-			var Longitude = msgContent.Longitude
+			username := msgContent.FromUsername
+			var Latitude = fmt.Sprintf("%f", msgContent.Latitude)
+			var Longitude = fmt.Sprintf("%f", msgContent.Longitude)
+			location := Latitude + ":" + Longitude
+			db := mysql.Connect()
+			result := db.Where("user_name", username).First(&mysql.QywxUserLocation{})
+			if result.RowsAffected == 1 {
+				//更新
+				db.Model(&mysql.QywxUserLocation{}).Where("user_name", username).Update("user_location", location)
+				logger.Write("查询到用户和位置数据已存在,更新位置数据:", username)
+			} else {
+				//插入
+				db.Create(&mysql.QywxUserLocation{
+					UserName:     username,
+					UserLocation: location,
+				})
+				logger.Write("查询到用户和位置数据不存在,插入位置数据:{}", username)
+			}
 			logger.Write("ProcessMessage 检测到机器人接收到的位置信息:", Latitude, Longitude)
 		}
 	}

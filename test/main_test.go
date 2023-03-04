@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"my-server-go/api"
+	"my-server-go/config/mysql"
 	"my-server-go/invoke/wx"
 	"testing"
 )
@@ -26,4 +27,21 @@ func Test3(t *testing.T) {
 
 func Test4(t *testing.T) {
 	wx.SendWxMessage("2312312312")
+}
+
+func Test5(t *testing.T) {
+	db := mysql.Connect()
+	//var qywx mysql.QywxUserLocation
+	//result := db.Where("user_name", "lihongwei").First(&mysql.QywxUserLocation{})
+	//fmt.Println(result.RowsAffected)
+	//db.Create(&mysql.QywxUserLocation{
+	//	UserName:     "lihongwei",
+	//	UserLocation: "123",
+	//})
+	//db.Save(&mysql.QywxUserLocation{
+	//	UserName:     "lihongwei",
+	//	UserLocation: "location",
+	//})
+	result := db.Where("user_name", "lihongwei").Update("user_location", "1211111:22")
+	fmt.Println(result.RowsAffected)
 }

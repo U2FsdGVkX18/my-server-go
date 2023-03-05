@@ -20,6 +20,10 @@ func GoodMorningWords() string {
 	if err != nil {
 		return ""
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	return gjson.Get(string(body), "result.content").String()
 }
@@ -30,6 +34,10 @@ func GoodNightWords() string {
 	if err != nil {
 		return ""
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	return gjson.Get(string(body), "result.content").String()
 }
@@ -41,6 +49,10 @@ func InspirationalQuotes() string {
 	if err != nil {
 		return ""
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	return gjson.Get(string(body), "result.saying").String()
 }
@@ -56,6 +68,10 @@ func Holidays() string {
 	if err != nil {
 		return ""
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	result := gjson.Get(string(body), "result.list").Array()[0]
 

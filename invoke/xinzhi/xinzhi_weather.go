@@ -20,6 +20,10 @@ func GetWeatherNow(location string) map[string]string {
 	if err != nil {
 		logger.Write("GetWeatherNow err:", err)
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	//返回的是一个json进行解析
 	result := gjson.Get(string(body), "results").Array()[0]
@@ -41,6 +45,10 @@ func GetWeatherDaily(location string) map[string]map[string]string {
 	if err != nil {
 		logger.Write("GetWeatherDaily err:", err)
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	//返回的是一个json进行解析
 	result := gjson.Get(string(body), "results").Array()[0]
@@ -76,6 +84,10 @@ func GetLifeSuggestion(location string) map[string]string {
 	if err != nil {
 		logger.Write("GetLifeSuggestion err:", err)
 	}
+	//defer关闭io流
+	defer func(Body io.ReadCloser) {
+		_ = Body.Close()
+	}(resp.Body)
 	body, _ := io.ReadAll(resp.Body)
 	//返回的是一个json进行解析
 	result := gjson.Get(string(body), "results").Array()[0]

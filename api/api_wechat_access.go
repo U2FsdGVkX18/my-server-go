@@ -54,6 +54,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 			echoStr := VerifyUrl(msg_signature, timestamp, nonce, echostr)
 			//响应
 			context.String(http.StatusOK, echoStr)
+			return
 		})
 		wechatGroup.POST("/recall", func(context *gin.Context) {
 			//获取参数
@@ -65,6 +66,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 			//处理消息
 			message := ProcessMessage(msg_signature, timestamp, nonce, post_data)
 			context.String(http.StatusOK, message)
+			return
 		})
 	}
 }

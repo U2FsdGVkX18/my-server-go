@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"my-server-go/api"
 	"my-server-go/config/mysql"
+	"my-server-go/invoke/douban"
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
@@ -58,6 +59,10 @@ func Test6(t *testing.T) {
 }
 
 func Test7(t *testing.T) {
-	str := tianxing.SentenceOfTheDay()
+	str := tianxing.Holidays()
 	fmt.Println(str)
+}
+
+func Test8(t *testing.T) {
+	douban.GetHotTestOriginalBookRanking()
 }

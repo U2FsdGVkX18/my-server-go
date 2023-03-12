@@ -10,6 +10,6 @@ func Write(any ...any) {
 	if err != nil {
 		return
 	}
-	logger := log.New(file, "log : ", log.Ldate|log.Ltime|log.Lshortfile)
+	logger := log.New(file, "log : ", log.Ldate|log.Ltime)
 	logger.Println(any)
 }

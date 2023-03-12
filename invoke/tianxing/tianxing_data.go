@@ -16,10 +16,7 @@ const basicUrl = "https://apis.tianapi.com"
 // GoodMorningWords 早安心语
 func GoodMorningWords() string {
 	url := basicUrl + "/zaoan/index?key=" + apiSecretKey
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		return ""
-	}
+	resp := invoke.SendGet(url, nil, nil)
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -30,10 +27,7 @@ func GoodMorningWords() string {
 
 func GoodNightWords() string {
 	url := basicUrl + "/wanan/index?key=" + apiSecretKey
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		return ""
-	}
+	resp := invoke.SendGet(url, nil, nil)
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -45,10 +39,8 @@ func GoodNightWords() string {
 // InspirationalQuotes 励志名言
 func InspirationalQuotes() string {
 	url := basicUrl + "/lzmy/index?key=" + apiSecretKey
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		return ""
-	}
+	resp := invoke.SendGet(url, nil, nil)
+
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -64,10 +56,8 @@ func Holidays() string {
 	params["key"] = apiSecretKey
 	params["date"] = tool.GetSystemCurrentDate()
 	params["mode"] = "1"
-	resp, err := invoke.SendGet(url, params, nil)
-	if err != nil {
-		return ""
-	}
+	resp := invoke.SendGet(url, params, nil)
+
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -89,10 +79,7 @@ func Holidays() string {
 // SentenceOfTheDay 每日一句
 func SentenceOfTheDay() string {
 	url := basicUrl + "/one/index?key=" + apiSecretKey
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		return ""
-	}
+	resp := invoke.SendGet(url, nil, nil)
 	body, _ := io.ReadAll(resp.Body)
 	return gjson.Get(string(body), "result.word").String()
 }

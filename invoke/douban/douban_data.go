@@ -8,6 +8,7 @@ import (
 	"io"
 	"my-server-go/config/mysql"
 	"my-server-go/invoke"
+	logger "my-server-go/tool/log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -15,16 +16,16 @@ import (
 
 func GetNewMovieRanking() {
 	url := "https://movie.douban.com/chart"
-	resp, err := invoke.SendGet(url, nil, GetHeader())
-	if err != nil {
-		fmt.Println(err)
-	}
+	resp := invoke.SendGet(url, nil, GetHeader())
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(resp.Body)
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		logger.Write("GetNewMovieRanking goquery.NewDocumentFromReader异常:", err)
+	}
 	doc.Find("div.article").Eq(0).Find("table").Each(func(i int, selection *goquery.Selection) {
 		td0 := selection.Find("td").Eq(0)
 		details, _ := td0.Find("a").Attr("href")
@@ -48,20 +49,21 @@ func GetNewMovieRanking() {
 		}
 		fmt.Println(douBanDataMovieRanking)
 	})
+	logger.Write("getNewMovieRanking 豆瓣新片电影排行数据爬取完成")
 }
 
 func GetMovieNowShowing() {
 	url := "https://movie.douban.com/cinema/nowplaying/hangzhou/"
-	resp, err := invoke.SendGet(url, nil, GetHeader())
-	if err != nil {
-		fmt.Println(err)
-	}
+	resp := invoke.SendGet(url, nil, GetHeader())
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(resp.Body)
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		logger.Write("GetMovieNowShowing goquery.NewDocumentFromReader异常:", err)
+	}
 	doc.Find("div#nowplaying").Find("div.mod-bd").Eq(0).Find("li.list-item").Each(func(i int, selection *goquery.Selection) {
 		name, _ := selection.Attr("data-title")
 		score, _ := selection.Attr("data-score")
@@ -86,25 +88,24 @@ func GetMovieNowShowing() {
 			Details:     details,
 			ImgUrl:      imgUrl,
 		}
-
 		fmt.Println(doubanMovieNowshowing)
-
 	})
-
+	logger.Write("GetMovieNowShowing 豆瓣电影正在上映数据爬取完成")
 }
 
 func GetMovieComingSoon() {
 	url := "https://movie.douban.com/cinema/later/hangzhou/"
-	resp, err := invoke.SendGet(url, nil, GetHeader())
-	if err != nil {
-		fmt.Println(err)
-	}
+	resp := invoke.SendGet(url, nil, GetHeader())
+
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(resp.Body)
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		logger.Write("GetMovieComingSoon goquery.NewDocumentFromReader异常:", err)
+	}
 	doc.Find("div#showing-soon").Find("div[class*='item mod']").Each(func(i int, selection *goquery.Selection) {
 		details, _ := selection.Find("a[class='thumb']").Eq(0).Attr("href")
 		imgUrl, _ := selection.Find("a[class='thumb']").Eq(0).Find("img").Attr("src")
@@ -125,22 +126,24 @@ func GetMovieComingSoon() {
 		}
 		fmt.Println(doubanMovieComingsoon)
 	})
+	logger.Write("GetMovieComingSoon 豆瓣电影即将上映数据爬取完成")
 }
 
 func GetTop250MovieRanking() {
 	db := mysql.Connect()
 	for i := 0; i <= 225; i += 25 {
 		url := "https://movie.douban.com/top250?start=" + strconv.Itoa(i) + "&filter="
-		resp, err := invoke.SendGet(url, nil, GetHeader())
-		if err != nil {
-			fmt.Println(err)
-		}
+		resp := invoke.SendGet(url, nil, GetHeader())
+
 		//defer关闭io流
 		defer func(Body io.ReadCloser) {
 			_ = Body.Close()
 		}(resp.Body)
 
 		doc, err := goquery.NewDocumentFromReader(resp.Body)
+		if err != nil {
+			logger.Write("GetTop250MovieRanking goquery.NewDocumentFromReader异常:", err)
+		}
 		doc.Find("div#content").Find("ol[class='grid_view']").Eq(0).Find("li").Each(func(i int, selection *goquery.Selection) {
 			details, _ := selection.Find("div[class='pic']").Eq(0).Find("a").Attr("href")
 			imgUrl, _ := selection.Find("div[class='pic']").Eq(0).Find("a").Eq(0).Find("img").Attr("src")
@@ -175,6 +178,7 @@ func GetTop250MovieRanking() {
 			db.Create(&doubanMovieTop250)
 			fmt.Println(doubanMovieTop250)
 		})
+		logger.Write("GetTop250MovieRanking 豆瓣TOP250第" + strconv.Itoa(i/25+1) + "页电影数据爬取完成")
 	}
 }
 
@@ -185,10 +189,8 @@ func GetHighScoreTVShowRanking() {
 		var headers = make(map[string]string)
 		headers["User-Agent"] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
 		headers["Referer"] = "https://movie.douban.com/tv/"
-		resp, err := invoke.SendGet(url, nil, headers)
-		if err != nil {
-			fmt.Println(err)
-		}
+		resp := invoke.SendGet(url, nil, headers)
+
 		//defer关闭io流
 		defer func(Body io.ReadCloser) {
 			_ = Body.Close()
@@ -223,21 +225,23 @@ func GetHighScoreTVShowRanking() {
 			}
 			db.Create(&doubanTvshowHighscore)
 		}
+		logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/25+1) + "页数据爬取完成")
 	}
 }
 
 func GetTop250BookRanking() {
 	for i := 0; i <= 225; i += 25 {
 		url := "https://book.douban.com/top250?start=" + strconv.Itoa(i)
-		resp, err := invoke.SendGet(url, nil, GetHeader())
-		if err != nil {
-			fmt.Println(err)
-		}
+		resp := invoke.SendGet(url, nil, GetHeader())
+
 		//defer关闭io流
 		defer func(Body io.ReadCloser) {
 			_ = Body.Close()
 		}(resp.Body)
 		doc, err := goquery.NewDocumentFromReader(resp.Body)
+		if err != nil {
+			logger.Write("GetTop250BookRanking goquery.NewDocumentFromReader异常:", err)
+		}
 		doc.Find("div#content").Find("div[class='indent']").Eq(0).Find("table").Each(func(i int, selection *goquery.Selection) {
 			details, _ := selection.Find("td").Eq(0).Find("a").Attr("href")
 			imgUrl, _ := selection.Find("td").Eq(0).Find("a").Eq(0).Find("img").Attr("src")
@@ -265,6 +269,7 @@ func GetTop250BookRanking() {
 			}
 			fmt.Println(doubanBookTop250)
 		})
+		logger.Write("GetTop250BookRanking 豆瓣TOP250第" + strconv.Itoa(i/25+1) + "页读书数据爬取完成")
 	}
 }
 
@@ -277,10 +282,8 @@ func GetHotTestPublishBookRanking() {
 		params["query"] = "\n    query getFilterWorksList($works_ids: [ID!]) {\n      worksList(worksIds: $works_ids) {\n        \n    \n    title\n    cover(useSmall: false)\n    url\n    isBundle\n    coverLabel(preferVip: true)\n  \n    \n  url\n  title\n\n    \n  author {\n    name\n    url\n  }\n  origAuthor {\n    name\n    url\n  }\n  translator {\n    name\n    url\n  }\n\n    \n  abstract\n  authorHighlight\n  editorHighlight\n\n    \n    isOrigin\n    kinds {\n      \n    name @skip(if: true)\n    shortName @include(if: true)\n    id\n  \n    }\n    ... on WorksBase @include(if: true) {\n      wordCount\n      wordCountUnit\n    }\n    ... on WorksBase @include(if: false) {\n      inLibraryCount\n    }\n    ... on WorksBase @include(if: false) {\n      \n    isEssay\n    \n    ... on EssayWorks {\n      favorCount\n    }\n  \n    \n    \n    averageRating\n    ratingCount\n    url\n    isColumn\n    isFinished\n  \n  \n  \n    }\n    ... on EbookWorks @include(if: false) {\n      \n    ... on EbookWorks {\n      book {\n        url\n        averageRating\n        ratingCount\n      }\n    }\n  \n    }\n    ... on WorksBase @include(if: false) {\n      isColumn\n      isEssay\n      onSaleTime\n      ... on ColumnWorks {\n        updateTime\n      }\n    }\n    ... on WorksBase @include(if: true) {\n      isColumn\n      ... on ColumnWorks {\n        isFinished\n      }\n    }\n    ... on EssayWorks {\n      essayActivityData {\n        \n    title\n    uri\n    tag {\n      name\n      color\n      background\n      icon2x\n      icon3x\n      iconSize {\n        height\n      }\n      iconPosition {\n        x y\n      }\n    }\n  \n      }\n    }\n    highlightTags {\n      name\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        tags {\n          id\n          name\n          url\n        }\n      }\n    }\n  \n    \n  ... on WorksBase {\n    copyrightInfo {\n      newlyAdapted\n      newlyPublished\n      adaptedName\n      publishedName\n    }\n  }\n\n    isInLibrary\n    ... on WorksBase @include(if: false) {\n      \n    fixedPrice\n    salesPrice\n    isRebate\n  \n    }\n    ... on EbookWorks {\n      \n    fixedPrice\n    salesPrice\n    isRebate\n  \n    }\n    ... on WorksBase @include(if: true) {\n      ... on EbookWorks {\n        id\n        isPurchased\n        isInWishlist\n      }\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        fandoms {\n          title\n          url\n        }\n      }\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        kudoCount\n      }\n    }\n  \n        id\n        isOrigin\n      }\n    }\n  "
 		params["sort"] = "hot"
 		marshal, _ := json.Marshal(params)
-		resp, err := invoke.SendPost(url, marshal, GetHeaderPost())
-		if err != nil {
-			fmt.Println(err)
-		}
+		resp := invoke.SendPost(url, marshal, GetHeaderPost())
+
 		//defer关闭io流
 		defer func(Body io.ReadCloser) {
 			_ = Body.Close()
@@ -327,7 +330,7 @@ func GetHotTestPublishBookRanking() {
 			}
 			fmt.Println(doubanBookHottestPublish)
 		}
-
+		logger.Write("GetHotTestPublishBookRanking 豆瓣出版书籍中热度最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
 }
 
@@ -340,10 +343,8 @@ func GetHighSalesPublishBookRanking() {
 		params["query"] = "\n    query getFilterWorksList($works_ids: [ID!]) {\n      worksList(worksIds: $works_ids) {\n        \n    \n    title\n    cover(useSmall: false)\n    url\n    isBundle\n    coverLabel(preferVip: true)\n  \n    \n  url\n  title\n\n    \n  author {\n    name\n    url\n  }\n  origAuthor {\n    name\n    url\n  }\n  translator {\n    name\n    url\n  }\n\n    \n  abstract\n  authorHighlight\n  editorHighlight\n\n    \n    isOrigin\n    kinds {\n      \n    name @skip(if: true)\n    shortName @include(if: true)\n    id\n  \n    }\n    ... on WorksBase @include(if: true) {\n      wordCount\n      wordCountUnit\n    }\n    ... on WorksBase @include(if: false) {\n      inLibraryCount\n    }\n    ... on WorksBase @include(if: false) {\n      \n    isEssay\n    \n    ... on EssayWorks {\n      favorCount\n    }\n  \n    \n    \n    averageRating\n    ratingCount\n    url\n    isColumn\n    isFinished\n  \n  \n  \n    }\n    ... on EbookWorks @include(if: false) {\n      \n    ... on EbookWorks {\n      book {\n        url\n        averageRating\n        ratingCount\n      }\n    }\n  \n    }\n    ... on WorksBase @include(if: false) {\n      isColumn\n      isEssay\n      onSaleTime\n      ... on ColumnWorks {\n        updateTime\n      }\n    }\n    ... on WorksBase @include(if: true) {\n      isColumn\n      ... on ColumnWorks {\n        isFinished\n      }\n    }\n    ... on EssayWorks {\n      essayActivityData {\n        \n    title\n    uri\n    tag {\n      name\n      color\n      background\n      icon2x\n      icon3x\n      iconSize {\n        height\n      }\n      iconPosition {\n        x y\n      }\n    }\n  \n      }\n    }\n    highlightTags {\n      name\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        tags {\n          id\n          name\n          url\n        }\n      }\n    }\n  \n    \n  ... on WorksBase {\n    copyrightInfo {\n      newlyAdapted\n      newlyPublished\n      adaptedName\n      publishedName\n    }\n  }\n\n    isInLibrary\n    ... on WorksBase @include(if: false) {\n      \n    fixedPrice\n    salesPrice\n    isRebate\n  \n    }\n    ... on EbookWorks {\n      \n    fixedPrice\n    salesPrice\n    isRebate\n  \n    }\n    ... on WorksBase @include(if: true) {\n      ... on EbookWorks {\n        id\n        isPurchased\n        isInWishlist\n      }\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        fandoms {\n          title\n          url\n        }\n      }\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        kudoCount\n      }\n    }\n  \n        id\n        isOrigin\n      }\n    }\n  "
 		params["sort"] = "sales"
 		marshal, _ := json.Marshal(params)
-		resp, err := invoke.SendPost(url, marshal, GetHeaderPost())
-		if err != nil {
-			fmt.Println(err)
-		}
+		resp := invoke.SendPost(url, marshal, GetHeaderPost())
+
 		//defer关闭io流
 		defer func(Body io.ReadCloser) {
 			_ = Body.Close()
@@ -390,7 +391,7 @@ func GetHighSalesPublishBookRanking() {
 			}
 			fmt.Println(doubanBookHighsalesPublish)
 		}
-
+		logger.Write("GetHighSalesPublishBookRanking 豆瓣出版书籍中销量最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
 }
 
@@ -403,10 +404,8 @@ func GetHotTestOriginalBookRanking() {
 		params["query"] = "\n    query getFilterWorksList($works_ids: [ID!]) {\n      worksList(worksIds: $works_ids) {\n        \n    \n    title\n    cover(useSmall: false)\n    url\n    isBundle\n    coverLabel(preferVip: true)\n  \n    \n  url\n  title\n\n    \n  author {\n    name\n    url\n  }\n  origAuthor {\n    name\n    url\n  }\n  translator {\n    name\n    url\n  }\n\n    \n  abstract\n  authorHighlight\n  editorHighlight\n\n    \n    isOrigin\n    kinds {\n      \n    name @skip(if: true)\n    shortName @include(if: true)\n    id\n  \n    }\n    ... on WorksBase @include(if: true) {\n      wordCount\n      wordCountUnit\n    }\n    ... on WorksBase @include(if: false) {\n      inLibraryCount\n    }\n    ... on WorksBase @include(if: false) {\n      \n    isEssay\n    \n    ... on EssayWorks {\n      favorCount\n    }\n  \n    \n    \n    averageRating\n    ratingCount\n    url\n    isColumn\n    isFinished\n  \n  \n  \n    }\n    ... on EbookWorks @include(if: false) {\n      \n    ... on EbookWorks {\n      book {\n        url\n        averageRating\n        ratingCount\n      }\n    }\n  \n    }\n    ... on WorksBase @include(if: false) {\n      isColumn\n      isEssay\n      onSaleTime\n      ... on ColumnWorks {\n        updateTime\n      }\n    }\n    ... on WorksBase @include(if: true) {\n      isColumn\n      ... on ColumnWorks {\n        isFinished\n      }\n    }\n    ... on EssayWorks {\n      essayActivityData {\n        \n    title\n    uri\n    tag {\n      name\n      color\n      background\n      icon2x\n      icon3x\n      iconSize {\n        height\n      }\n      iconPosition {\n        x y\n      }\n    }\n  \n      }\n    }\n    highlightTags {\n      name\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        tags {\n          id\n          name\n          url\n        }\n      }\n    }\n  \n    \n  ... on WorksBase {\n    copyrightInfo {\n      newlyAdapted\n      newlyPublished\n      adaptedName\n      publishedName\n    }\n  }\n\n    isInLibrary\n    ... on WorksBase @include(if: false) {\n      \n    fixedPrice\n    salesPrice\n    isRebate\n  \n    }\n    ... on EbookWorks {\n      \n    fixedPrice\n    salesPrice\n    isRebate\n  \n    }\n    ... on WorksBase @include(if: true) {\n      ... on EbookWorks {\n        id\n        isPurchased\n        isInWishlist\n      }\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        fandoms {\n          title\n          url\n        }\n      }\n    }\n    ... on WorksBase @include(if: false) {\n      fanfiction {\n        kudoCount\n      }\n    }\n  \n        id\n        isOrigin\n      }\n    }\n  "
 		params["sort"] = "hot"
 		marshal, _ := json.Marshal(params)
-		resp, err := invoke.SendPost(url, marshal, GetHeaderPost())
-		if err != nil {
-			fmt.Println(err)
-		}
+		resp := invoke.SendPost(url, marshal, GetHeaderPost())
+
 		//defer关闭io流
 		defer func(Body io.ReadCloser) {
 			_ = Body.Close()
@@ -453,7 +452,7 @@ func GetHotTestOriginalBookRanking() {
 			}
 			fmt.Println(doubanBookHottestOriginal)
 		}
-
+		logger.Write("GetHotTestOriginalBookRanking 豆瓣原创书籍中热度最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
 }
 

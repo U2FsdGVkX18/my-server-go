@@ -160,6 +160,7 @@ type DoubanBookHighsalesPublish struct {
 
 func CreateTables() {
 	db := Connect()
+	//初始化表,当表不存在则创建表
 	err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
 		&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
 		&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})

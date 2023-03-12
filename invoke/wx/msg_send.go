@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"my-server-go/config/redis"
 	"my-server-go/invoke"
 	logger "my-server-go/tool/log"
+	"time"
 )
 
 // SendWxMessage 主动发送微信消息
@@ -24,10 +26,8 @@ func SendWxMessage(content string) {
 	token := GetAccessToken()
 	sendMessageUrl := "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token
 	//发送请求
-	resp, err := invoke.SendPost(sendMessageUrl, marshal, nil)
-	if err != nil {
-		logger.Write("SendWxMessage 请求错误:", err)
-	}
+	resp := invoke.SendPost(sendMessageUrl, marshal, nil)
+
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
 	}(resp.Body)
@@ -47,32 +47,37 @@ type TokenBody struct {
 
 // GetAccessToken 获取accessToken
 func GetAccessToken() string {
-	const corpId = "ww8d5186f5aa839ee7"
-	const corpSecret = "FQcVXdjCMF2N6GVFGQcbe6izTKtS8tlHi8fPpCgl2PU"
-	const getAccessTokenUrl = "https://qyapi.weixin.qq.com/cgi-bin/gettoken"
-	//封装url参数
-	params := make(map[string]string)
-	params["corpId"] = corpId
-	params["corpSecret"] = corpSecret
-	//发送请求
-	resp, err := invoke.SendGet(getAccessTokenUrl, params, nil)
-	if err != nil {
-		logger.Write("GetAccessToken 请求错误:", err)
-		return ""
-	}
-	//defer关闭io流
-	defer func(Body io.ReadCloser) {
-		_ = Body.Close()
-	}(resp.Body)
-	//读取body
-	body, _ := io.ReadAll(resp.Body)
-	//定义结构体
-	var tokenBody TokenBody
-	//将json格式转为对应结构体
-	_ = json.Unmarshal(body, &tokenBody)
-	//拿到数据进行处理
-	if tokenBody.Errcode == 0 {
+	//首先从redis中获取token
+	token := redis.GetValue("wxAccessToken")
+	if token == "" {
+		//如果token值为空,发送请求请求token
+		const corpId = "ww8d5186f5aa839ee7"
+		const corpSecret = "FQcVXdjCMF2N6GVFGQcbe6izTKtS8tlHi8fPpCgl2PU"
+		const getAccessTokenUrl = "https://qyapi.weixin.qq.com/cgi-bin/gettoken"
+		//封装url参数
+		params := make(map[string]string)
+		params["corpId"] = corpId
+		params["corpSecret"] = corpSecret
+		//发送请求
+		resp := invoke.SendGet(getAccessTokenUrl, params, nil)
+		//defer关闭io流
+		defer func(Body io.ReadCloser) {
+			_ = Body.Close()
+		}(resp.Body)
+		//读取body
+		body, _ := io.ReadAll(resp.Body)
+		//定义结构体
+		var tokenBody TokenBody
+		//将json格式转为对应结构体
+		_ = json.Unmarshal(body, &tokenBody)
+		//先把请求到的token放入redis
+		redis.SetValue("redisWxAccessToken", tokenBody.AccessToken, 7200*1000*time.Millisecond)
+		//再将数据进行返回
+		logger.Write("newWxAccessToken :", tokenBody.AccessToken)
 		return tokenBody.AccessToken
+	} else {
+		//否则直接返回redis中的token,减少请求提高效率
+		logger.Write("redisWxAccessToken :", token)
+		return token
 	}
-	return ""
 }

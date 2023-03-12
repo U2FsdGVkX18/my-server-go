@@ -4,7 +4,6 @@ import (
 	"github.com/tidwall/gjson"
 	"io"
 	"my-server-go/invoke"
-	logger "my-server-go/tool/log"
 )
 
 // 私钥
@@ -16,10 +15,8 @@ const basicUrl = "https://api.seniverse.com/v3"
 // GetWeatherNow 获取天气实况(位置,天气,温度)
 func GetWeatherNow(location string) map[string]string {
 	url := basicUrl + "/weather/now.json?key=" + apiSecretKey + "&location=" + location
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		logger.Write("GetWeatherNow err:", err)
-	}
+	resp := invoke.SendGet(url, nil, nil)
+
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -41,10 +38,8 @@ func GetWeatherNow(location string) map[string]string {
 // GetWeatherDaily 获取逐日天气预报(免费版只能获取未来三天)
 func GetWeatherDaily(location string) map[string]map[string]string {
 	url := basicUrl + "/weather/daily.json?key=" + apiSecretKey + "&location=" + location
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		logger.Write("GetWeatherDaily err:", err)
-	}
+	resp := invoke.SendGet(url, nil, nil)
+
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()
@@ -80,10 +75,8 @@ func GetWeatherDaily(location string) map[string]map[string]string {
 // GetLifeSuggestion 获取生活指数
 func GetLifeSuggestion(location string) map[string]string {
 	url := basicUrl + "/life/suggestion.json?key=" + apiSecretKey + "&location=" + location
-	resp, err := invoke.SendGet(url, nil, nil)
-	if err != nil {
-		logger.Write("GetLifeSuggestion err:", err)
-	}
+	resp := invoke.SendGet(url, nil, nil)
+
 	//defer关闭io流
 	defer func(Body io.ReadCloser) {
 		_ = Body.Close()

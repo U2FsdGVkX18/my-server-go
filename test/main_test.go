@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"my-server-go/api"
 	"my-server-go/config/mysql"
+	"my-server-go/config/redis"
 	"my-server-go/invoke/douban"
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
 	"testing"
+	"time"
 )
 
 func TestOne(t *testing.T) {
@@ -65,4 +67,10 @@ func Test7(t *testing.T) {
 
 func Test8(t *testing.T) {
 	douban.GetHotTestOriginalBookRanking()
+}
+
+func Test9(t *testing.T) {
+	redis.SetValue("key", "token", 7200*1000*time.Millisecond)
+	//value := redis.GetValue("key")
+	//fmt.Println(value)
 }

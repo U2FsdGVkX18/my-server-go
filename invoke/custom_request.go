@@ -2,18 +2,20 @@ package invoke
 
 import (
 	"bytes"
+	logger "my-server-go/tool/log"
 	"net/http"
 	"net/url"
 )
 
 // SendGet 封装GET请求
-func SendGet(reqUrl string, param map[string]string, header map[string]string) (resp *http.Response, err error) {
+func SendGet(reqUrl string, param map[string]string, header map[string]string) (resp *http.Response) {
 	if param == nil && header == nil {
 		resp, err := http.Get(reqUrl)
 		if err != nil {
-			return nil, err
+			logger.Write("SendGet get请求出错:", err)
+			return nil
 		}
-		return resp, err
+		return resp
 
 	} else if param == nil {
 		client := &http.Client{}
@@ -23,9 +25,10 @@ func SendGet(reqUrl string, param map[string]string, header map[string]string) (
 		}
 		resp, err := client.Do(req)
 		if err != nil {
-			return nil, err
+			logger.Write("SendGet get请求出错:", err)
+			return nil
 		}
-		return resp, err
+		return resp
 
 	} else if header == nil {
 		Url, _ := url.Parse(reqUrl)
@@ -36,32 +39,35 @@ func SendGet(reqUrl string, param map[string]string, header map[string]string) (
 		Url.RawQuery = params.Encode()
 		resp, err := http.Get(Url.String())
 		if err != nil {
-			return nil, err
+			logger.Write("SendGet get请求出错:", err)
+			return nil
 		}
-		return resp, err
+		return resp
 	}
-	return nil, err
+	return nil
 }
 
 // SendPost 封装POST请求
-func SendPost(reqUrl string, param []byte, header map[string]string) (resp *http.Response, err error) {
+func SendPost(reqUrl string, param []byte, header map[string]string) (resp *http.Response) {
 	client := &http.Client{}
 	if header == nil {
 		req, _ := http.NewRequest("POST", reqUrl, bytes.NewReader(param))
-		resp, err = client.Do(req)
+		resp, err := client.Do(req)
 		if err != nil {
-			return nil, err
+			logger.Write("SendPost post请求出错:", err)
+			return nil
 		}
-		return resp, err
+		return resp
 	} else {
 		req, _ := http.NewRequest("POST", reqUrl, bytes.NewReader(param))
 		for k, v := range header {
 			req.Header.Add(k, v)
 		}
-		resp, err = client.Do(req)
+		resp, err := client.Do(req)
 		if err != nil {
-			return nil, err
+			logger.Write("SendPost post请求出错:", err)
+			return nil
 		}
-		return resp, err
+		return resp
 	}
 }

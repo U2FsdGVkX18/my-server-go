@@ -7,7 +7,7 @@ import (
 
 func Cron() {
 	c := cron.New(cron.WithSeconds())
-	spec := "0 36 23 * * ?"
+	spec := "0 0/1 * * * ?"
 	_, err := c.AddFunc(spec, wx.SendMessageEveryMorning)
 	if err != nil {
 		return

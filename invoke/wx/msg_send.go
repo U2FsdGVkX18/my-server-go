@@ -2,7 +2,6 @@ package wx
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"my-server-go/config/redis"
 	"my-server-go/invoke"
@@ -11,7 +10,7 @@ import (
 )
 
 // SendWxMessage 主动发送微信消息
-func SendWxMessage(content string) {
+func SendWxMessage(content string) any {
 	//构造主动发送消息体
 	map1 := make(map[string]any)
 	map1["touser"] = "@all"
@@ -35,7 +34,8 @@ func SendWxMessage(content string) {
 	body, _ := io.ReadAll(resp.Body)
 	m := make(map[string]any)
 	_ = json.Unmarshal(body, &m)
-	fmt.Println(m["errcode"])
+
+	return m["errcode"]
 }
 
 type TokenBody struct {
@@ -71,7 +71,7 @@ func GetAccessToken() string {
 		//将json格式转为对应结构体
 		_ = json.Unmarshal(body, &tokenBody)
 		//先把请求到的token放入redis
-		redis.SetValue("redisWxAccessToken", tokenBody.AccessToken, 7200*1000*time.Millisecond)
+		redis.SetValue("wxAccessToken", tokenBody.AccessToken, 20*1000*time.Millisecond)
 		//再将数据进行返回
 		logger.Write("newWxAccessToken :", tokenBody.AccessToken)
 		return tokenBody.AccessToken

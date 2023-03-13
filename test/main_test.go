@@ -9,6 +9,7 @@ import (
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
+	wx2 "my-server-go/service/wx"
 	"testing"
 	"time"
 )
@@ -73,4 +74,9 @@ func Test9(t *testing.T) {
 	redis.SetValue("key", "token", 7200*1000*time.Millisecond)
 	//value := redis.GetValue("key")
 	//fmt.Println(value)
+}
+
+func Test10(t *testing.T) {
+	wx2.SendMessageEveryMorning()
+
 }

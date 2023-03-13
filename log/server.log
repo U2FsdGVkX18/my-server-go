@@ -29,3 +29,19 @@ log : 2023/03/13 23:24:00 [redisWxAccessToken : 0CqN1MrMMLctLi3mrmIr9ZhiGw82cHG6
 log : 2023/03/13 23:30:10 [GetValue redis获取值错误: redis: nil]
 log : 2023/03/13 23:30:11 [newWxAccessToken : 0CqN1MrMMLctLi3mrmIr9ZhiGw82cHG6zLRRropBWSVX2I1ZXJJEJHKKH6vbMsNfml__cYYbfdAMawYQKFp6o-27V8-weo2uaMB0P-TplgEdj_djBJH74GIoCqYJdcVmYd4d7coECMvgdjJMk5m1l79lgQipW4qa98IhvKV_KPr8Eey2UliiB267Os39JUw1iFwcFPZZaQNDkrnyF2zqmw]
 log : 2023/03/13 23:30:11 [SendMessageEveryMorning 消息发送失败!]
+log : 2023/03/13 23:48:00 [GetValue redis获取值错误: redis: nil]
+log : 2023/03/13 23:48:01 [newWxAccessToken : 0CqN1MrMMLctLi3mrmIr9ZhiGw82cHG6zLRRropBWSVX2I1ZXJJEJHKKH6vbMsNfml__cYYbfdAMawYQKFp6o-27V8-weo2uaMB0P-TplgEdj_djBJH74GIoCqYJdcVmYd4d7coECMvgdjJMk5m1l79lgQipW4qa98IhvKV_KPr8Eey2UliiB267Os39JUw1iFwcFPZZaQNDkrnyF2zqmw]
+log : 2023/03/13 23:48:01 [SendMessageEveryMorning 消息发送失败!]
+
+
+
+
+log : 2023/03/13 23:55:00 [GetValue redis获取值错误: redis: nil]
+log : 2023/03/13 23:55:01 [newWxAccessToken : 0CqN1MrMMLctLi3mrmIr9ZhiGw82cHG6zLRRropBWSVX2I1ZXJJEJHKKH6vbMsNfml__cYYbfdAMawYQKFp6o-27V8-weo2uaMB0P-TplgEdj_djBJH74GIoCqYJdcVmYd4d7coECMvgdjJMk5m1l79lgQipW4qa98IhvKV_KPr8Eey2UliiB267Os39JUw1iFwcFPZZaQNDkrnyF2zqmw]
+log : 2023/03/13 23:55:01 [SendMessageEveryMorning 消息发送失败!]
+log : 2023/03/13 23:56:00 [GetValue redis获取值错误: redis: nil]
+log : 2023/03/13 23:56:01 [newWxAccessToken : 0CqN1MrMMLctLi3mrmIr9ZhiGw82cHG6zLRRropBWSVX2I1ZXJJEJHKKH6vbMsNfml__cYYbfdAMawYQKFp6o-27V8-weo2uaMB0P-TplgEdj_djBJH74GIoCqYJdcVmYd4d7coECMvgdjJMk5m1l79lgQipW4qa98IhvKV_KPr8Eey2UliiB267Os39JUw1iFwcFPZZaQNDkrnyF2zqmw]
+log : 2023/03/13 23:56:01 [SendMessageEveryMorning 消息发送失败!]
+log : 2023/03/13 23:57:00 [GetValue redis获取值错误: redis: nil]
+log : 2023/03/13 23:57:01 [newWxAccessToken : 0CqN1MrMMLctLi3mrmIr9ZhiGw82cHG6zLRRropBWSVX2I1ZXJJEJHKKH6vbMsNfml__cYYbfdAMawYQKFp6o-27V8-weo2uaMB0P-TplgEdj_djBJH74GIoCqYJdcVmYd4d7coECMvgdjJMk5m1l79lgQipW4qa98IhvKV_KPr8Eey2UliiB267Os39JUw1iFwcFPZZaQNDkrnyF2zqmw]
+log : 2023/03/13 23:57:01 [SendMessageEveryMorning 消息发送失败!]

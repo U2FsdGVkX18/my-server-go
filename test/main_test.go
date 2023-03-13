@@ -11,7 +11,6 @@ import (
 	"my-server-go/invoke/xinzhi"
 	wx2 "my-server-go/service/wx"
 	"testing"
-	"time"
 )
 
 func TestOne(t *testing.T) {
@@ -71,9 +70,9 @@ func Test8(t *testing.T) {
 }
 
 func Test9(t *testing.T) {
-	redis.SetValue("key", "token", 7200*1000*time.Millisecond)
-	//value := redis.GetValue("key")
-	//fmt.Println(value)
+	//redis.SetValue("key", "token", 7200*1000*time.Millisecond)
+	value := redis.GetValue("wxAccessToken")
+	fmt.Println(value)
 }
 
 func Test10(t *testing.T) {

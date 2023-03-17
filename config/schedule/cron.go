@@ -3,14 +3,27 @@ package schedule
 import (
 	"github.com/robfig/cron/v3"
 	"my-server-go/service/wx"
+	logger "my-server-go/tool/log"
 )
 
-func Cron() {
-	c := cron.New(cron.WithSeconds())
+func Job() {
+	c := cron.New(cron.WithSeconds(), cron.WithChain(cron.Recover(cron.DefaultLogger)))
 	spec := "0 0/1 * * * ?"
-	_, err := c.AddFunc(spec, wx.SendMessageEveryMorning)
+	_, err := c.AddJob(spec, &everyMorning{})
 	if err != nil {
-		return
+		logger.Write("everyMorning定时任务执行err", err)
 	}
 	c.Start()
 }
+
+type everyMorning struct{}
+
+func (j *everyMorning) Run() {
+	wx.SendMessageEveryMorning()
+}
+
+//type myjob2 struct{}
+//
+//func (j *myjob2) Run() {
+//	return
+//}

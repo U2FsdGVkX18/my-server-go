@@ -1,6 +1,7 @@
 package xinzhi
 
 import (
+	"fmt"
 	"github.com/tidwall/gjson"
 	"io"
 	"my-server-go/invoke"
@@ -24,6 +25,7 @@ func GetWeatherNow(location string) map[string]string {
 	body, _ := io.ReadAll(resp.Body)
 	//返回的是一个json进行解析
 	result := gjson.Get(string(body), "results").Array()[0]
+	fmt.Println(gjson.Get(string(body), "results").Array())
 	//定义结果map
 	var weatherNowMap = make(map[string]string)
 	weatherNowMap["name"] = result.Get("location.name").String()

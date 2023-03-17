@@ -9,7 +9,7 @@ import (
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
-	wx2 "my-server-go/service/wx"
+	logger "my-server-go/tool/log"
 	"testing"
 )
 
@@ -56,7 +56,7 @@ func Test5(t *testing.T) {
 
 func Test6(t *testing.T) {
 
-	daily := xinzhi.GetWeatherDaily("30.292601:120.039001")
+	daily := xinzhi.GetWeatherNow("30.292601:120.039001")
 	fmt.Println(daily)
 }
 
@@ -71,11 +71,15 @@ func Test8(t *testing.T) {
 
 func Test9(t *testing.T) {
 	//redis.SetValue("key", "token", 7200*1000*time.Millisecond)
+	//value := redis.GetValue("wxAccessToken")
+	//fmt.Println(value)
+	redis.SetValue("wxAccessToken", "123", 7200*1000*1000)
 	value := redis.GetValue("wxAccessToken")
-	fmt.Println(value)
+
+	fmt.Println("redis:", value)
 }
 
 func Test10(t *testing.T) {
-	wx2.SendMessageEveryMorning()
-
+	//wx2.SendMessageEveryMorning()
+	logger.Write("123123123")
 }

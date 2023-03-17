@@ -58,7 +58,7 @@ func SendMessageEveryMorning() {
 		"穿衣指标：" + lifeSuggestion["dressing"] + "\n" +
 		"是否容易感冒：" + lifeSuggestion["flu"] + "\n" +
 		"是否适合旅游：" + lifeSuggestion["travel"] + "\n" +
-		"是否适合运动️：" + lifeSuggestion["sport"] + "\n" +
+		"是否适合运动：" + lifeSuggestion["sport"] + "\n" +
 		"是否适合洗车：" + lifeSuggestion["car_washing"] + "\n" +
 		"数据更新时间：" + lifeSuggestion["last_update"] + "\n" +
 		"\n" +

@@ -23,7 +23,8 @@ func GetValue(key string) string {
 	rdb := Connect()
 	result, err := rdb.Get(ctx, key).Result()
 	if err != nil {
-		logger.Write("GetValue redis获取值错误:", err)
+		logger.Write("GetValue redis获取值错误或为空值:", err)
+		return ""
 	}
 	return result
 }

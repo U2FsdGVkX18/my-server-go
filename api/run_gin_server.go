@@ -2,9 +2,11 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"my-server-go/config/schedule"
 )
 
 func Run() {
+	go schedule.Job()
 	//创建一个默认gin web服务
 	var ginServer = gin.Default()
 	//调用函数创建路由

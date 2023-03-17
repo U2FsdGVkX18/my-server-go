@@ -71,7 +71,7 @@ func GetAccessToken() string {
 		//将json格式转为对应结构体
 		_ = json.Unmarshal(body, &tokenBody)
 		//先把请求到的token放入redis
-		redis.SetValue("wxAccessToken", tokenBody.AccessToken, 20*1000*time.Millisecond)
+		redis.SetValue("wxAccessToken", tokenBody.AccessToken, 7200*1000*time.Millisecond)
 		//再将数据进行返回
 		logger.Write("newWxAccessToken :", tokenBody.AccessToken)
 		return tokenBody.AccessToken

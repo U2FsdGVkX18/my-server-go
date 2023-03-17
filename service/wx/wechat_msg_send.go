@@ -74,6 +74,6 @@ func SendMessageEveryMorning() {
 	if code == 0 {
 		logger.Write("SendMessageEveryMorning 消息发送成功!")
 	} else {
-		logger.Write("SendMessageEveryMorning 消息发送失败!")
+		logger.Write("SendMessageEveryMorning 消息发送失败!", code)
 	}
 }

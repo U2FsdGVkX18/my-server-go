@@ -34,7 +34,7 @@ func SendWxMessage(content string) any {
 	body, _ := io.ReadAll(resp.Body)
 	m := make(map[string]any)
 	_ = json.Unmarshal(body, &m)
-
+	logger.Write(m)
 	return m["errcode"]
 }
 

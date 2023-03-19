@@ -10,7 +10,7 @@ import (
 )
 
 // SendWxMessage 主动发送微信消息
-func SendWxMessage(content string) any {
+func SendWxMessage(content string) float64 {
 	//构造主动发送消息体
 	map1 := make(map[string]any)
 	map1["touser"] = "@all"
@@ -35,7 +35,7 @@ func SendWxMessage(content string) any {
 	m := make(map[string]any)
 	_ = json.Unmarshal(body, &m)
 	logger.Write(m)
-	return m["errcode"]
+	return m["errcode"].(float64)
 }
 
 type TokenBody struct {

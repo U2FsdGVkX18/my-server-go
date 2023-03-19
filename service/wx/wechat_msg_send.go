@@ -77,3 +77,22 @@ func SendMessageEveryMorning() {
 		logger.Write("SendMessageEveryMorning 消息发送失败!", code)
 	}
 }
+
+//func SendMessageEveryHour() {
+//	//获得位置信息
+//	db := mysql.Connect()
+//	var userLocation mysql.QywxUserLocation
+//	db.Where("user_name", "LiHongWei").Find(&userLocation)
+//	weatherNow := xinzhi.GetWeatherNow(userLocation.UserLocation)
+//
+//	//消息
+//	var message = "【实时天气】" + "\n" +
+//		"\n" +
+//		"地点：" + weatherNow["path"] + "\n" +
+//		"当前天气☀️：" + weatherNow["text"] + "\n" +
+//		"当前温度℃：" + weatherNow["temperature"] + "℃" + "\n" +
+//		"数据更新时间：" + weatherNow["last_update"] + "\n" +
+//		""
+//	code := wx.SendWxMessage(message)
+//
+//}

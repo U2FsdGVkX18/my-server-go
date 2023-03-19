@@ -8,11 +8,16 @@ import (
 
 func Job() {
 	c := cron.New(cron.WithSeconds(), cron.WithChain(cron.Recover(cron.DefaultLogger)))
-	//spec := "0 0 8 * * ?"
-	spec := "0 0/1 * * * ? "
-	_, err := c.AddJob(spec, &everyMorning{})
+	EveryMorning := "0 0 8 * * ?"
+	_, err := c.AddJob(EveryMorning, &everyMorning{})
 	if err != nil {
-		logger.Write("everyMorning定时任务执行err", err)
+		logger.Write("EveryMorning定时任务执行err", err)
+	}
+
+	EveryHour := "0 0/30 8-23 * * ?"
+	_, err = c.AddJob(EveryHour, &everyHour{})
+	if err != nil {
+		logger.Write("EveryHour定时任务执行err", err)
 	}
 	c.Start()
 }
@@ -23,8 +28,8 @@ func (everyMorning *everyMorning) Run() {
 	wx.SendMessageEveryMorning()
 }
 
-//type myjob2 struct{}
-//
-//func (j *myjob2) Run() {
-//	return
-//}
+type everyHour struct{}
+
+func (everyHour *everyHour) Run() {
+	wx.SendMessageEveryHour()
+}

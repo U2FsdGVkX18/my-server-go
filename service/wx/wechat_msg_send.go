@@ -44,7 +44,7 @@ func SendMessageEveryMorning() {
 		"\n" +
 		holidays + "\n" +
 		"地点：" + weatherNow["path"] + "\n" +
-		"白天天气☀️：" + weatherDailyToDay["text_day"] + "\n" +
+		"白天天气：" + weatherDailyToDay["text_day"] + "\n" +
 		"晚间天气：" + weatherDailyToDay["text_night"] + "\n" +
 		"最高温度℃：" + weatherDailyToDay["high"] + "℃" + "\n" +
 		"最低温度℃：" + weatherDailyToDay["low"] + "℃" + "\n" +
@@ -83,13 +83,14 @@ func SendMessageEveryHour() {
 	db := mysql.Connect()
 	var userLocation mysql.QywxUserLocation
 	db.Where("user_name", "LiHongWei").Find(&userLocation)
+	//查询天气
 	weatherNow := xinzhi.GetWeatherNow(userLocation.UserLocation)
 
 	//消息
 	var message = "【实时天气】" + "\n" +
 		"\n" +
 		"地点：" + weatherNow["path"] + "\n" +
-		"当前天气☀️：" + weatherNow["text"] + "\n" +
+		"当前天气：" + weatherNow["text"] + "\n" +
 		"当前温度℃：" + weatherNow["temperature"] + "℃" + "\n" +
 		"数据更新时间：" + weatherNow["last_update"] + "\n" +
 		""
@@ -98,5 +99,57 @@ func SendMessageEveryHour() {
 		logger.Write("SendMessageEveryHour 消息发送成功!")
 	} else {
 		logger.Write("SendMessageEveryHour 消息发送失败!", code)
+	}
+}
+
+func SendMessageEveryNight() {
+	//晚安心语
+	goodNightWords := tianxing.GoodNightWords()
+	//获得位置信息
+	db := mysql.Connect()
+	var userLocation mysql.QywxUserLocation
+	db.Where("user_name", "LiHongWei").Find(&userLocation)
+	//获取逐日天气预报
+	weatherDaily := xinzhi.GetWeatherDaily(userLocation.UserLocation)
+	//明天
+	weatherDailyTomorrow := weatherDaily["tomorrow"]
+	//后天
+	weatherDailyTheDayAfterTomorrow := weatherDaily["theDayAfterTomorrow"]
+	//数据更新时间
+	weatherDailyLastUpdate := weatherDaily["last_update"]
+	//消息
+	var message = "【晚安】" + "\n" +
+		"\n" +
+		goodNightWords + "\n" +
+		"\n" +
+		"未来两天天气预报：" + "\n" +
+		"日期：" + weatherDailyTomorrow["date"] + "\n" +
+		"白天天气：" + weatherDailyTomorrow["text_day"] + "\n" +
+		"晚间天气：" + weatherDailyTomorrow["text_night"] + "\n" +
+		"最高温度℃：" + weatherDailyTomorrow["high"] + "℃" + "\n" +
+		"最低温度℃：" + weatherDailyTomorrow["low"] + "℃" + "\n" +
+		"降水概率☔️：" + weatherDailyTomorrow["precip"] + "%\n" +
+		"降水量☔️：" + weatherDailyTomorrow["rainfall"] + "mm\n" +
+		"风速：" + weatherDailyTomorrow["wind_speed"] + "km/h\n" +
+		"风力等级：" + weatherDailyTomorrow["wind_scale"] + "级\n" +
+		"相对湿度：" + weatherDailyTomorrow["humidity"] + "%\n" +
+		"\n" +
+		"日期：" + weatherDailyTheDayAfterTomorrow["date"] + "\n" +
+		"白天天气：" + weatherDailyTheDayAfterTomorrow["text_day"] + "\n" +
+		"晚间天气：" + weatherDailyTheDayAfterTomorrow["text_night"] + "\n" +
+		"最高温度℃：" + weatherDailyTheDayAfterTomorrow["high"] + "℃" + "\n" +
+		"最低温度℃：" + weatherDailyTheDayAfterTomorrow["low"] + "℃" + "\n" +
+		"降水概率☔️：" + weatherDailyTheDayAfterTomorrow["precip"] + "%\n" +
+		"降水量☔️：" + weatherDailyTheDayAfterTomorrow["rainfall"] + "mm\n" +
+		"风速：" + weatherDailyTheDayAfterTomorrow["wind_speed"] + "km/h\n" +
+		"风力等级：" + weatherDailyTheDayAfterTomorrow["wind_scale"] + "级\n" +
+		"相对湿度：" + weatherDailyTheDayAfterTomorrow["humidity"] + "%\n" +
+		"数据更新时间：" + weatherDailyLastUpdate["last_update"] + "\n" +
+		""
+	code := wx.SendWxMessage(message)
+	if code == 0 {
+		logger.Write("SendMessageEveryNight 消息发送成功!")
+	} else {
+		logger.Write("SendMessageEveryNight 消息发送失败!", code)
 	}
 }

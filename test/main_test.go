@@ -66,7 +66,7 @@ func Test7(t *testing.T) {
 }
 
 func Test8(t *testing.T) {
-	douban.GetHotTestOriginalBookRanking()
+	douban.GetHighScoreTVShowRanking()
 }
 
 func Test9(t *testing.T) {
@@ -82,4 +82,8 @@ func Test9(t *testing.T) {
 func Test10(t *testing.T) {
 	//wx2.SendMessageEveryMorning()
 	logger.Write("123123123")
+}
+
+func Test11(t *testing.T) {
+	mysql.CreateTables()
 }

@@ -5,6 +5,8 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"my-server-go/config/mysql"
 	logger "my-server-go/tool/log"
 	"my-server-go/tool/wechataes"
@@ -41,6 +43,24 @@ type MsgContent struct {
 }
 
 func WeChatAccess(ginServer *gin.Engine) {
+	vec := prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "http_requests_total",
+		Help: "Number of HTTP requests",
+	}, []string{"method", "endpoint", "status"})
+
+	prometheus.MustRegister(vec)
+
+	ginServer.Use(func(context *gin.Context) {
+		method := context.Request.Method
+		endpoint := context.FullPath()
+		status := context.Writer.Status()
+		vec.WithLabelValues(method, endpoint, fmt.Sprintf("%d", status))
+		context.Next()
+	})
+
+	//Add Prometheus metrics endpoint
+	ginServer.GET("/metrics", gin.WrapH(promhttp.Handler()))
+
 	var wechatGroup = ginServer.Group("/wechat")
 	{
 		wechatGroup.GET("/recall", func(context *gin.Context) {

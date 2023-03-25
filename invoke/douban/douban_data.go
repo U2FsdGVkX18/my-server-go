@@ -225,7 +225,7 @@ func GetHighScoreTVShowRanking() {
 			}
 			db.Create(&doubanTvshowHighscore)
 		}
-		logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/25+1) + "页数据爬取完成")
+		//logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/25+1) + "页数据爬取完成")
 	}
 }
 

@@ -57,12 +57,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 		Buckets: prometheus.DefBuckets,
 	}, []string{"method", "endpoint", "status"})
 
-	reqConcurrent := prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "http_concurrent_requests",
-		Help: "Number of concurrent HTTP requests",
-	})
-
-	prometheus.MustRegister(reqCounter, reqDuration, reqConcurrent)
+	prometheus.MustRegister(reqCounter, reqDuration)
 
 	//使用中间件
 	ginServer.Use(func(context *gin.Context) {
@@ -70,14 +65,11 @@ func WeChatAccess(ginServer *gin.Engine) {
 		endpoint := context.FullPath()
 
 		start := time.Now()
-		reqConcurrent.Inc()
 
 		context.Next()
 
 		duration := time.Since(start)
 		status := context.Writer.Status()
-
-		reqConcurrent.Dec()
 
 		reqCounter.WithLabelValues(method, endpoint, fmt.Sprintf("%d", status)).Inc()
 		reqDuration.WithLabelValues(method, endpoint, fmt.Sprintf("%d", status)).Observe(duration.Seconds())

@@ -11,6 +11,7 @@ import (
 	logger "my-server-go/tool/log"
 	"my-server-go/tool/wechataes"
 	"net/http"
+	"time"
 )
 
 const sCorpID = "ww8d5186f5aa839ee7"
@@ -43,19 +44,43 @@ type MsgContent struct {
 }
 
 func WeChatAccess(ginServer *gin.Engine) {
-	vec := prometheus.NewCounterVec(prometheus.CounterOpts{
+	//接入Prometheus
+	reqCounter := prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "http_requests_total",
 		Help: "Number of HTTP requests",
 	}, []string{"method", "endpoint", "status"})
 
-	prometheus.MustRegister(vec)
+	//请求持续时间
+	reqDuration := prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "http_request_duration_seconds",
+		Help:    "Duration of HTTP requests",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"method", "endpoint", "status"})
 
+	reqConcurrent := prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "http_concurrent_requests",
+		Help: "Number of concurrent HTTP requests",
+	})
+
+	prometheus.MustRegister(reqCounter, reqDuration, reqConcurrent)
+
+	//使用中间件
 	ginServer.Use(func(context *gin.Context) {
 		method := context.Request.Method
 		endpoint := context.FullPath()
-		status := context.Writer.Status()
-		vec.WithLabelValues(method, endpoint, fmt.Sprintf("%d", status))
+
+		start := time.Now()
+		reqConcurrent.Inc()
+
 		context.Next()
+
+		duration := time.Since(start)
+		status := context.Writer.Status()
+
+		reqConcurrent.Dec()
+
+		reqCounter.WithLabelValues(method, endpoint, fmt.Sprintf("%d", status)).Inc()
+		reqDuration.WithLabelValues(method, endpoint, fmt.Sprintf("%d", status)).Observe(duration.Seconds())
 	})
 
 	//Add Prometheus metrics endpoint

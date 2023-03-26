@@ -191,14 +191,17 @@ func GetTop250MovieRanking() {
 				Quote:                quote,
 			}
 			db.Create(&doubanMovieTop250)
-			fmt.Println(doubanMovieTop250)
 		})
 		logger.Write("GetTop250MovieRanking 豆瓣TOP250第" + strconv.Itoa(i/25+1) + "页电影数据爬取完成")
 	}
 }
 
 func GetHighScoreTVShowRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_tvshow_highscores"
 	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	for i := 0; i <= 180; i += 20 {
 		url := "https://m.douban.com/rexxar/api/v2/tv/recommend?refresh=0&start=" + strconv.Itoa(i) + "&count=20&selected_categories=%7B%7D&uncollect=false&sort=S&tags="
 		var headers = make(map[string]string)
@@ -240,7 +243,7 @@ func GetHighScoreTVShowRanking() {
 			}
 			db.Create(&doubanTvshowHighscore)
 		}
-		//logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/25+1) + "页数据爬取完成")
+		logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/25+1) + "页数据爬取完成")
 	}
 }
 
@@ -289,6 +292,11 @@ func GetTop250BookRanking() {
 }
 
 func GetHotTestPublishBookRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_book_hottest_publishes"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	for i := 1; i <= 50; i++ {
 		url := "https://read.douban.com/j/kind/"
 		var params = make(map[string]any)
@@ -343,13 +351,18 @@ func GetHotTestPublishBookRanking() {
 				Details:    details,
 				ImgUrl:     imgUrl,
 			}
-			fmt.Println(doubanBookHottestPublish)
+			db.Create(&doubanBookHottestPublish)
 		}
 		logger.Write("GetHotTestPublishBookRanking 豆瓣出版书籍中热度最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
 }
 
 func GetHighSalesPublishBookRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_book_highsales_publishes"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	for i := 1; i <= 50; i++ {
 		url := "https://read.douban.com/j/kind/"
 		var params = make(map[string]any)
@@ -404,13 +417,18 @@ func GetHighSalesPublishBookRanking() {
 				Details:    details,
 				ImgUrl:     imgUrl,
 			}
-			fmt.Println(doubanBookHighsalesPublish)
+			db.Create(&doubanBookHighsalesPublish)
 		}
 		logger.Write("GetHighSalesPublishBookRanking 豆瓣出版书籍中销量最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
 }
 
 func GetHotTestOriginalBookRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_book_hottest_originals"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	for i := 1; i <= 50; i++ {
 		url := "https://read.douban.com/j/kind/"
 		var params = make(map[string]any)
@@ -441,8 +459,8 @@ func GetHotTestOriginalBookRanking() {
 			for _, translator := range item.Get("translator").Array() {
 				translators += translator.Get("name").String() + "/"
 			}
-			//all := strings.ReplaceAll(item.Get("abstract").String(), " ", "")
-			//summary := strings.ReplaceAll(all, "\n", "")
+			all := strings.ReplaceAll(item.Get("abstract").String(), " ", "")
+			summary := strings.ReplaceAll(all, "\n", "")
 			kindss := ""
 			for _, kinds := range item.Get("kinds").Array() {
 				kindss += kinds.Get("shortName").String() + "/"
@@ -457,7 +475,7 @@ func GetHotTestOriginalBookRanking() {
 				Author:     authors,
 				OrigAuthor: origAuthors,
 				Translator: translators,
-				Summary:    "summary",
+				Summary:    summary,
 				Kinds:      kindss,
 				WordCount:  wordCount,
 				FixedPrice: fixedPrice,
@@ -465,7 +483,7 @@ func GetHotTestOriginalBookRanking() {
 				Details:    details,
 				ImgUrl:     imgUrl,
 			}
-			fmt.Println(doubanBookHottestOriginal)
+			db.Create(&doubanBookHottestOriginal)
 		}
 		logger.Write("GetHotTestOriginalBookRanking 豆瓣原创书籍中热度最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}

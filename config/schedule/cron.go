@@ -18,7 +18,7 @@ func Job() {
 		logger.Write("EveryMorning定时任务执行err", err)
 	}
 	//配置定时任务2
-	EveryHour := "0 0/30 8-23 * * ?"
+	EveryHour := "0 0/30 8-22 * * ?"
 	_, err = c.AddJob(EveryHour, &everyHour{})
 	if err != nil {
 		logger.Write("EveryHour定时任务执行err", err)
@@ -30,10 +30,16 @@ func Job() {
 		logger.Write("EveryNight定时任务执行err", err)
 	}
 	//配置定时任务4
-	EveryDayZero := "0 06 15 * * ?"
+	EveryDayZero := "0 0 0 * * ?"
 	_, err = c.AddJob(EveryDayZero, &everyDayZero{})
 	if err != nil {
 		logger.Write("EveryDayZero定时任务执行err", err)
+	}
+	//配置定时任务5
+	EveryWeekZero := "0 27 15 * * ?"
+	_, err = c.AddJob(EveryWeekZero, &everyWeekZero{})
+	if err != nil {
+		logger.Write("EveryWeekZero定时任务执行err", err)
 	}
 
 	c.Start()
@@ -74,5 +80,27 @@ func (everyDayZero *everyDayZero) Run() {
 		logger.Write("everyDayZero 消息发送成功!")
 	} else {
 		logger.Write("everyDayZero 消息发送失败!", code)
+	}
+}
+
+type everyWeekZero struct{}
+
+func (everyWeekZero *everyWeekZero) Run() {
+	douban.GetHighScoreTVShowRanking()
+	douban.GetHotTestPublishBookRanking()
+	douban.GetHighSalesPublishBookRanking()
+	douban.GetHotTestOriginalBookRanking()
+	var message = "【豆瓣爬虫】" + "\n" +
+		"\n" +
+		"高分电视剧排行数据spider结束" + "|" +
+		"出版书籍中热度最高排行数据spider结束" + "|" +
+		"出版出版书籍中销量最高排行数据spider结束" + "|" +
+		"出版原创书籍中热度最高排行数据spider结束" + "\n" +
+		""
+	code := wx2.SendWxMessage(message)
+	if code == 0 {
+		logger.Write("everyWeekZero 消息发送成功!")
+	} else {
+		logger.Write("everyWeekZero 消息发送失败!", code)
 	}
 }

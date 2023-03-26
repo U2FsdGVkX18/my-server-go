@@ -145,7 +145,11 @@ func GetMovieComingSoon() {
 }
 
 func GetTop250MovieRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_movie_top250"
 	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	for i := 0; i <= 225; i += 25 {
 		url := "https://movie.douban.com/top250?start=" + strconv.Itoa(i) + "&filter="
 		resp := invoke.SendGet(url, nil, GetHeader())
@@ -243,11 +247,16 @@ func GetHighScoreTVShowRanking() {
 			}
 			db.Create(&doubanTvshowHighscore)
 		}
-		logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/25+1) + "页数据爬取完成")
+		logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/20+1) + "页数据爬取完成")
 	}
 }
 
 func GetTop250BookRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_book_top250"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	for i := 0; i <= 225; i += 25 {
 		url := "https://book.douban.com/top250?start=" + strconv.Itoa(i)
 		resp := invoke.SendGet(url, nil, GetHeader())
@@ -285,7 +294,7 @@ func GetTop250BookRanking() {
 				ScorePeople:                 uint(parseUint),
 				Quote:                       quote,
 			}
-			fmt.Println(doubanBookTop250)
+			db.Create(&doubanBookTop250)
 		})
 		logger.Write("GetTop250BookRanking 豆瓣TOP250第" + strconv.Itoa(i/25+1) + "页读书数据爬取完成")
 	}

@@ -41,6 +41,12 @@ func Job() {
 	if err != nil {
 		logger.Write("EveryWeekZero定时任务执行err", err)
 	}
+	//配置定时任务6
+	EveryMonthZero := "0 10 16 * * ?"
+	_, err = c.AddJob(EveryMonthZero, &everyMonthZero{})
+	if err != nil {
+		logger.Write("EveryMonthZero定时任务执行err", err)
+	}
 
 	c.Start()
 }
@@ -102,5 +108,23 @@ func (everyWeekZero *everyWeekZero) Run() {
 		logger.Write("everyWeekZero 消息发送成功!")
 	} else {
 		logger.Write("everyWeekZero 消息发送失败!", code)
+	}
+}
+
+type everyMonthZero struct{}
+
+func (everyMonthZero *everyMonthZero) Run() {
+	douban.GetTop250MovieRanking()
+	douban.GetTop250BookRanking()
+	var message = "【豆瓣爬虫】" + "\n" +
+		"\n" +
+		"TOP250电影数据spider结束" + "|" +
+		"TOP250读书数据spider结束" + "\n" +
+		""
+	code := wx2.SendWxMessage(message)
+	if code == 0 {
+		logger.Write("everyMonthZero 消息发送成功!")
+	} else {
+		logger.Write("everyMonthZero 消息发送失败!", code)
 	}
 }

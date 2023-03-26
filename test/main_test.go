@@ -87,3 +87,12 @@ func Test10(t *testing.T) {
 func Test11(t *testing.T) {
 	mysql.CreateTables()
 }
+
+func Test12(t *testing.T) {
+	db := mysql.Connect()
+	var sch mysql.Scheduled
+	var cron string
+	db.Select("Cron").Where("id = ?", 1).First(&sch).Scan(&cron)
+	db.Select("Cron").Where("id = ?", 1).First(&mysql.Scheduled{}).Scan(&cron)
+	fmt.Println(cron)
+}

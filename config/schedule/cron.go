@@ -2,6 +2,7 @@ package schedule
 
 import (
 	"github.com/robfig/cron/v3"
+	"my-server-go/config/mysql"
 	"my-server-go/invoke/douban"
 	wx2 "my-server-go/invoke/wx"
 	"my-server-go/service/wx"
@@ -9,41 +10,49 @@ import (
 )
 
 func Job() {
+	//从数据库中获取cron表达式
+	db := mysql.Connect()
 	//初始化(秒级别,并增加错误回调函数)
 	c := cron.New(cron.WithSeconds(), cron.WithChain(cron.Recover(cron.DefaultLogger)))
 	//配置定时任务1
-	EveryMorning := "0 0 8 * * ?"
-	_, err := c.AddJob(EveryMorning, &everyMorning{})
+	var scheduled1 mysql.Scheduled
+	db.Where("id = ?", 1).Find(&scheduled1)
+	_, err := c.AddJob(scheduled1.Cron, &everyMorning{})
 	if err != nil {
 		logger.Write("EveryMorning定时任务执行err", err)
 	}
 	//配置定时任务2
-	EveryHour := "0 0/30 8-22 * * ?"
-	_, err = c.AddJob(EveryHour, &everyHour{})
+	var scheduled2 mysql.Scheduled
+	db.Where("id = ?", 2).Find(&scheduled2)
+	_, err = c.AddJob(scheduled2.Cron, &everyHour{})
 	if err != nil {
 		logger.Write("EveryHour定时任务执行err", err)
 	}
 	//配置定时任务3
-	EveryNight := "0 0 23 * * ?"
-	_, err = c.AddJob(EveryNight, &everyNight{})
+	var scheduled3 mysql.Scheduled
+	db.Where("id = ?", 3).Find(&scheduled3)
+	_, err = c.AddJob(scheduled3.Cron, &everyNight{})
 	if err != nil {
 		logger.Write("EveryNight定时任务执行err", err)
 	}
 	//配置定时任务4
-	EveryDayZero := "0 0 0 * * ?"
-	_, err = c.AddJob(EveryDayZero, &everyDayZero{})
+	var scheduled4 mysql.Scheduled
+	db.Where("id = ?", 4).Find(&scheduled4)
+	_, err = c.AddJob(scheduled4.Cron, &everyDayZero{})
 	if err != nil {
 		logger.Write("EveryDayZero定时任务执行err", err)
 	}
 	//配置定时任务5
-	EveryWeekZero := "0 27 15 * * ?"
-	_, err = c.AddJob(EveryWeekZero, &everyWeekZero{})
+	var scheduled5 mysql.Scheduled
+	db.Where("id = ?", 5).Find(&scheduled5)
+	_, err = c.AddJob(scheduled5.Cron, &everyWeekZero{})
 	if err != nil {
 		logger.Write("EveryWeekZero定时任务执行err", err)
 	}
 	//配置定时任务6
-	EveryMonthZero := "0 10 16 * * ?"
-	_, err = c.AddJob(EveryMonthZero, &everyMonthZero{})
+	var scheduled6 mysql.Scheduled
+	db.Where("id = ?", 6).Find(&scheduled6)
+	_, err = c.AddJob(scheduled6.Cron, &everyMonthZero{})
 	if err != nil {
 		logger.Write("EveryMonthZero定时任务执行err", err)
 	}

@@ -22,7 +22,7 @@ func SendMessageEveryMorning() {
 	//获得位置信息
 	db := mysql.Connect()
 	var userLocation mysql.QywxUserLocation
-	db.Where("user_name", "LiHongWei").Find(&userLocation)
+	db.Where("user_name = ?", "LiHongWei").Find(&userLocation)
 
 	//查询天气,获取现在天气数据
 	weatherNow := xinzhi.GetWeatherNow(userLocation.UserLocation)
@@ -82,7 +82,7 @@ func SendMessageEveryHour() {
 	//获得位置信息
 	db := mysql.Connect()
 	var userLocation mysql.QywxUserLocation
-	db.Where("user_name", "LiHongWei").Find(&userLocation)
+	db.Where("user_name = ?", "LiHongWei").Find(&userLocation)
 	//查询天气
 	weatherNow := xinzhi.GetWeatherNow(userLocation.UserLocation)
 
@@ -108,7 +108,7 @@ func SendMessageEveryNight() {
 	//获得位置信息
 	db := mysql.Connect()
 	var userLocation mysql.QywxUserLocation
-	db.Where("user_name", "LiHongWei").Find(&userLocation)
+	db.Where("user_name = ?", "LiHongWei").Find(&userLocation)
 	//获取逐日天气预报
 	weatherDaily := xinzhi.GetWeatherDaily(userLocation.UserLocation)
 	//明天

@@ -15,6 +15,11 @@ import (
 )
 
 func GetNewMovieRanking() {
+	//清空表的数据,重新插入
+	tableName := "douban_newmovie_rankings"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	url := "https://movie.douban.com/chart"
 	resp := invoke.SendGet(url, nil, GetHeader())
 	//defer关闭io流
@@ -47,12 +52,17 @@ func GetNewMovieRanking() {
 			Score:       score,
 			ScorePeople: uint(parseUint),
 		}
-		fmt.Println(douBanDataMovieRanking)
+		db.Create(&douBanDataMovieRanking)
 	})
 	logger.Write("getNewMovieRanking 豆瓣新片电影排行数据爬取完成")
 }
 
 func GetMovieNowShowing() {
+	//清空表的数据,重新插入
+	tableName := "douban_movie_nowshowings"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	url := "https://movie.douban.com/cinema/nowplaying/hangzhou/"
 	resp := invoke.SendGet(url, nil, GetHeader())
 	//defer关闭io流
@@ -88,12 +98,17 @@ func GetMovieNowShowing() {
 			Details:     details,
 			ImgUrl:      imgUrl,
 		}
-		fmt.Println(doubanMovieNowshowing)
+		db.Create(&doubanMovieNowshowing)
 	})
 	logger.Write("GetMovieNowShowing 豆瓣电影正在上映数据爬取完成")
 }
 
 func GetMovieComingSoon() {
+	//清空表的数据,重新插入
+	tableName := "douban_movie_comingsoons"
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	//请求数据
 	url := "https://movie.douban.com/cinema/later/hangzhou/"
 	resp := invoke.SendGet(url, nil, GetHeader())
 
@@ -124,7 +139,7 @@ func GetMovieComingSoon() {
 			Region:      region,
 			WantToSee:   wantToSee,
 		}
-		fmt.Println(doubanMovieComingsoon)
+		db.Create(&doubanMovieComingsoon)
 	})
 	logger.Write("GetMovieComingSoon 豆瓣电影即将上映数据爬取完成")
 }

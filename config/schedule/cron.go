@@ -2,12 +2,14 @@ package schedule
 
 import (
 	"github.com/robfig/cron/v3"
+	"my-server-go/invoke/douban"
+	wx2 "my-server-go/invoke/wx"
 	"my-server-go/service/wx"
 	logger "my-server-go/tool/log"
 )
 
 func Job() {
-	//初始化
+	//初始化(秒级别,并增加错误回调函数)
 	c := cron.New(cron.WithSeconds(), cron.WithChain(cron.Recover(cron.DefaultLogger)))
 	//配置定时任务1
 	EveryMorning := "0 0 8 * * ?"
@@ -26,6 +28,12 @@ func Job() {
 	_, err = c.AddJob(EveryNight, &everyNight{})
 	if err != nil {
 		logger.Write("EveryNight定时任务执行err", err)
+	}
+	//配置定时任务4
+	EveryDayZero := "0 06 15 * * ?"
+	_, err = c.AddJob(EveryDayZero, &everyDayZero{})
+	if err != nil {
+		logger.Write("EveryDayZero定时任务执行err", err)
 	}
 
 	c.Start()
@@ -47,4 +55,24 @@ type everyNight struct{}
 
 func (everyNight *everyNight) Run() {
 	wx.SendMessageEveryNight()
+}
+
+type everyDayZero struct{}
+
+func (everyDayZero *everyDayZero) Run() {
+	douban.GetNewMovieRanking()
+	douban.GetMovieNowShowing()
+	douban.GetMovieComingSoon()
+	var message = "【豆瓣爬虫】" + "\n" +
+		"\n" +
+		"新片电影排行数据spider结束" + "|" +
+		"正在上映电影数据spider结束" + "|" +
+		"即将上映电影数据spider结束" + "\n" +
+		""
+	code := wx2.SendWxMessage(message)
+	if code == 0 {
+		logger.Write("everyDayZero 消息发送成功!")
+	} else {
+		logger.Write("everyDayZero 消息发送失败!", code)
+	}
 }

@@ -6,6 +6,7 @@ import (
 	"my-server-go/config/mysql"
 	"my-server-go/config/redis"
 	"my-server-go/invoke/douban"
+	"my-server-go/invoke/notion"
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
@@ -95,4 +96,8 @@ func Test12(t *testing.T) {
 	db.Select("Cron").Where("id = ?", 1).First(&sch).Scan(&cron)
 	db.Select("Cron").Where("id = ?", 1).First(&mysql.Scheduled{}).Scan(&cron)
 	fmt.Println(cron)
+}
+
+func Test13(t *testing.T) {
+	notion.DeleteDataBaseData("7ec1b96bd47f4c5c86fab914c24b3c73")
 }

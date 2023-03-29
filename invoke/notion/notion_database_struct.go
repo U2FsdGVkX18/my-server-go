@@ -2,8 +2,8 @@ package notion
 
 // JsonRootBean 根节点
 type JsonRootBean struct {
-	Parent     Parent     `json:"parent"`
-	Properties Properties `json:"properties"`
+	Parent     Parent `json:"parent"`
+	Properties any    `json:"properties"`
 }
 
 // Parent 主节点
@@ -14,30 +14,26 @@ type Parent struct {
 
 // Properties 主节点
 type Properties struct {
-	ID             ID       `json:"ID"`
-	Name           Title    `json:"Name"`
-	Img            Img      `json:"Img"`
-	ImgUrl         ImgUrl   `json:"ImgUrl"`
-	Details        Details  `json:"Details"`
-	DataCreateTime RichText `json:"DataCreateTime"`
+	ID             ID             `json:"ID"`
+	Name           Name           `json:"Name"`
+	Img            Img            `json:"Img"`
+	ImgUrl         ImgUrl         `json:"ImgUrl"`
+	Details        Details        `json:"Details"`
+	DataCreateTime DataCreateTime `json:"DataCreateTime"`
 }
 
 type BookProperties struct {
-	Properties  Properties
-	ScorePeople ScorePeople `json:"ScorePeople"`
-	Score       Score       `json:"Score"`
-	Author      Author      `json:"Author"`
-	OrigAuthor  OrigAuthor  `json:"OrigAuthor"`
-	Translator  Translator  `json:"Translator"`
-	Summary     Summary     `json:"Summary"`
-	Kinds       Kinds       `json:"Kinds"`
-	WordCount   WordCount   `json:"WordCount"`
-	FixedPrice  FixedPrice  `json:"FixedPrice"`
-	SalesPrice  SalesPrice  `json:"SalesPrice"`
+	Author     Author     `json:"Author"`
+	OrigAuthor OrigAuthor `json:"OrigAuthor"`
+	Translator Translator `json:"Translator"`
+	Summary    Summary    `json:"Summary"`
+	Kinds      Kinds      `json:"Kinds"`
+	WordCount  WordCount  `json:"WordCount"`
+	FixedPrice FixedPrice `json:"FixedPrice"`
+	SalesPrice SalesPrice `json:"SalesPrice"`
 }
 
 type HighScoreTVShowRankingProperties struct {
-	Properties  Properties
 	ScorePeople ScorePeople `json:"ScorePeople"`
 	Score       Score       `json:"Score"`
 	Subtitle    Subtitle    `json:"Subtitle"`
@@ -48,7 +44,6 @@ type HighScoreTVShowRankingProperties struct {
 }
 
 type MovieComingSoonProperties struct {
-	Properties  Properties
 	Region      Region      `json:"Region"`
 	ReleaseDate ReleaseDate `json:"ReleaseDate"`
 	Type        Type        `json:"Type"`
@@ -56,7 +51,6 @@ type MovieComingSoonProperties struct {
 }
 
 type MovieNowShowingProperties struct {
-	Properties  Properties
 	ScorePeople ScorePeople `json:"ScorePeople"`
 	Score       Score       `json:"Score"`
 	Release     Release     `json:"Release"`
@@ -67,14 +61,12 @@ type MovieNowShowingProperties struct {
 }
 
 type NewMovieRankingProperties struct {
-	Properties  Properties
 	ScorePeople ScorePeople `json:"ScorePeople"`
 	Score       Score       `json:"Score"`
 	Intro       Intro       `json:"Intro"`
 }
 
 type Top250BookRankingProperties struct {
-	Properties                  Properties
 	ScorePeople                 ScorePeople                 `json:"ScorePeople"`
 	Score                       Score                       `json:"Score"`
 	AuthorPressPublicationPrice AuthorPressPublicationPrice `json:"AuthorPressPublicationPrice"`
@@ -82,7 +74,6 @@ type Top250BookRankingProperties struct {
 }
 
 type Top250MovieRankingProperties struct {
-	Properties           Properties
 	ScorePeople          ScorePeople          `json:"ScorePeople"`
 	Score                Score                `json:"Score"`
 	DirectorAndActors    DirectorAndActors    `json:"DirectorAndActors"`
@@ -91,7 +82,7 @@ type Top250MovieRankingProperties struct {
 }
 
 type ID struct {
-	Number int `json:"number"`
+	Number uint `json:"number"`
 }
 
 type Title struct {
@@ -104,11 +95,11 @@ type Text struct {
 }
 
 type Img struct {
-	Files []File `json:"files"`
-	Type  string `json:"type"`
+	Files []Files `json:"files"`
+	Type  string  `json:"type"`
 }
 
-type File struct {
+type Files struct {
 	External External `json:"external"`
 	Name     string   `json:"name"`
 	Type     string   `json:"type"`
@@ -206,7 +197,7 @@ type Intro struct {
 }
 
 type Name struct {
-	RichText []RichText `json:"rich_text"`
+	Title []Title `json:"title"`
 }
 
 type Quote struct {

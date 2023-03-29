@@ -306,7 +306,7 @@ func GetHotTestPublishBookRanking() {
 	db := mysql.Connect()
 	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
-	for i := 1; i <= 50; i++ {
+	for i := 1; i <= 25; i++ {
 		url := "https://read.douban.com/j/kind/"
 		var params = make(map[string]any)
 		params["kind"] = 1
@@ -372,7 +372,7 @@ func GetHighSalesPublishBookRanking() {
 	db := mysql.Connect()
 	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
-	for i := 1; i <= 50; i++ {
+	for i := 1; i <= 25; i++ {
 		url := "https://read.douban.com/j/kind/"
 		var params = make(map[string]any)
 		params["kind"] = 1
@@ -438,7 +438,7 @@ func GetHotTestOriginalBookRanking() {
 	db := mysql.Connect()
 	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
-	for i := 1; i <= 50; i++ {
+	for i := 1; i <= 25; i++ {
 		url := "https://read.douban.com/j/kind/"
 		var params = make(map[string]any)
 		params["kind"] = 0

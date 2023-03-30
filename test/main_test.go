@@ -58,7 +58,10 @@ func Test5(t *testing.T) {
 func Test6(t *testing.T) {
 
 	daily := xinzhi.GetWeatherDaily("30.292601:120.039001")
-	fmt.Println(daily)
+	for k, v := range daily {
+		fmt.Println(k, v)
+	}
+	
 }
 
 func Test7(t *testing.T) {

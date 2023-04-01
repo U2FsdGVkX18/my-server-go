@@ -46,14 +46,14 @@ func Job() {
 	//配置定时任务5
 	var scheduled5 mysql.Scheduled
 	db.Select("cron").Where("id = ?", 5).Find(&scheduled5)
-	_, err = c.AddJob(scheduled5.Cron, &everyWeekZero{})
+	_, err = c.AddJob(scheduled5.Cron, &everyWeekOne{})
 	if err != nil {
 		logger.Write("EveryWeekZero定时任务执行err", err)
 	}
 	//配置定时任务6
 	var scheduled6 mysql.Scheduled
 	db.Select("cron").Where("id = ?", 6).Find(&scheduled6)
-	_, err = c.AddJob(scheduled6.Cron, &everyMonthZero{})
+	_, err = c.AddJob(scheduled6.Cron, &everyMonthTwo{})
 	if err != nil {
 		logger.Write("EveryMonthZero定时任务执行err", err)
 	}
@@ -104,9 +104,9 @@ func (everyDayZero *everyDayZero) Run() {
 	wx2.SendWxMessage(message2)
 }
 
-type everyWeekZero struct{}
+type everyWeekOne struct{}
 
-func (everyWeekZero *everyWeekZero) Run() {
+func (everyWeekOne *everyWeekOne) Run() {
 	douban.GetHighScoreTVShowRanking()
 	douban.GetHotTestPublishBookRanking()
 	douban.GetHighSalesPublishBookRanking()
@@ -133,9 +133,9 @@ func (everyWeekZero *everyWeekZero) Run() {
 	wx2.SendWxMessage(message2)
 }
 
-type everyMonthZero struct{}
+type everyMonthTwo struct{}
 
-func (everyMonthZero *everyMonthZero) Run() {
+func (everyMonthTwo *everyMonthTwo) Run() {
 	douban.GetTop250MovieRanking()
 	douban.GetTop250BookRanking()
 	var message1 = "【豆瓣爬虫】" + "\n" +

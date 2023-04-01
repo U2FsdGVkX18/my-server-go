@@ -62,10 +62,6 @@ func SendMessageEveryMorning() {
 		"是否适合洗车：" + lifeSuggestion["car_washing"] + "\n" +
 		"数据更新时间：" + lifeSuggestion["last_update"] + "\n" +
 		"\n" +
-		"当前天气：" + weatherNow["text"] + "\n" +
-		"当前温度℃：" + weatherNow["temperature"] + "℃" + "\n" +
-		"数据更新时间：" + weatherNow["last_update"] + "\n" +
-		"\n" +
 		"今日格言：" + inspirationalQuotes + "\n" +
 		"\n" +
 		"每日一句：" + sentenceOfTheDay + "\n" +

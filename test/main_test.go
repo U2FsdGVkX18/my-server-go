@@ -61,7 +61,7 @@ func Test6(t *testing.T) {
 	for k, v := range daily {
 		fmt.Println(k, v)
 	}
-	
+
 }
 
 func Test7(t *testing.T) {
@@ -103,6 +103,6 @@ func Test12(t *testing.T) {
 }
 
 func Test13(t *testing.T) {
-	notion.SyncHotTestOriginalBookRanking()
+	notion.SyncMovieNowShowing()
 
 }

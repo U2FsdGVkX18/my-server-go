@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/tidwall/gjson"
 	"io"
+	"my-server-go/config/mysql"
 	"my-server-go/invoke"
 )
 
@@ -15,6 +16,7 @@ const basicUrl = "https://api.seniverse.com/v3"
 
 // GetWeatherNow 获取天气实况(位置,天气,温度)
 func GetWeatherNow(location string) map[string]string {
+	db := mysql.Connect()
 	url := basicUrl + "/weather/now.json?key=" + apiSecretKey + "&location=" + location
 	resp := invoke.SendGet(url, nil, nil)
 
@@ -33,6 +35,8 @@ func GetWeatherNow(location string) map[string]string {
 	weatherNowMap["text"] = result.Get("now.text").String()
 	weatherNowMap["temperature"] = result.Get("now.temperature").String()
 	weatherNowMap["last_update"] = result.Get("last_update").String()
+	//更新 QywxUserLocation表,将坐标得到的实际地址更新到location字段中
+	db.Model(&mysql.QywxUserLocation{}).Where("user_name = ?", "LiHongWei").Update("location", result.Get("location.path").String())
 	//返回map
 	return weatherNowMap
 }

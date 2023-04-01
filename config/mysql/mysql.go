@@ -28,6 +28,7 @@ type QywxUserLocation struct {
 	ID           uint      `gorm:"primarykey"`
 	UserName     string    `gorm:"type:varchar(255);comment:企业成员微信用户名"`
 	UserLocation string    `gorm:"type:varchar(255);comment:企业成员定位地址纬度+经度"`
+	Location     string    `gorm:"type:varchar(255);comment:企业成员定位地址"`
 	CreatedAt    time.Time `gorm:"comment:创建时间"`
 	UpdatedAt    time.Time `gorm:"comment:更新时间"`
 }
@@ -161,9 +162,10 @@ type DoubanBookHighsalesPublish struct {
 func CreateTables() {
 	db := Connect()
 	//初始化表,当表不存在则创建表
-	err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
-		&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
-		&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})
+	//err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
+	//	&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
+	//	&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})
+	err := db.AutoMigrate(&QywxUserLocation{})
 	if err != nil {
 		log.Write("db AutoMigrate err:", err)
 	}

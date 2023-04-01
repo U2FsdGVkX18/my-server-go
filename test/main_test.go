@@ -6,7 +6,6 @@ import (
 	"my-server-go/config/mysql"
 	"my-server-go/config/redis"
 	"my-server-go/invoke/douban"
-	"my-server-go/invoke/notion"
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
@@ -103,6 +102,6 @@ func Test12(t *testing.T) {
 }
 
 func Test13(t *testing.T) {
-	notion.SyncMovieNowShowing()
-
+	//notion.SyncMovieNowShowing()
+	
 }

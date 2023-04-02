@@ -44,6 +44,21 @@ type MsgContent struct {
 	AppType      string  `xml:"AppType"`
 }
 
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusNoContent)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func WeChatAccess(ginServer *gin.Engine) {
 	//接入Prometheus
 	reqCounter := prometheus.NewCounterVec(prometheus.CounterOpts{
@@ -107,6 +122,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 			return
 		})
 	}
+	ginServer.Use(CORSMiddleware())
 	var businessGroup = ginServer.Group("/business")
 	{
 		businessGroup.POST("/getCity", func(context *gin.Context) {

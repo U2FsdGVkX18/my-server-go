@@ -8,6 +8,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"my-server-go/config/mysql"
+	"my-server-go/service/business"
 	logger "my-server-go/tool/log"
 	"my-server-go/tool/wechataes"
 	"net/http"
@@ -109,7 +110,10 @@ func WeChatAccess(ginServer *gin.Engine) {
 	var businessGroup = ginServer.Group("/business")
 	{
 		businessGroup.POST("/getCity", func(context *gin.Context) {
-			
+			//获取城市数据
+			citys := business.GetRainCity()
+			context.JSON(http.StatusOK, citys)
+			return
 		})
 	}
 }

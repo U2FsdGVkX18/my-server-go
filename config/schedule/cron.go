@@ -72,7 +72,7 @@ type everyHour struct{}
 
 func (everyHour *everyHour) Run() {
 	wx.SendMessageEveryHour()
-	business.GetAllCityWeather()
+	business.GetAllCityWeatherInsertDB()
 }
 
 type everyNight struct{}

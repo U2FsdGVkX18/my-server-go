@@ -16,7 +16,8 @@ const apiSecretKey = "SVb6HuTfbwzu0pNrK"
 // API
 const basicUrl = "https://api.seniverse.com/v3"
 
-func GetAllCityWeather() {
+// GetAllCityWeatherInsertDB GetAllCityWeather 获取每个城市的天气数据插入并插入到数据库中
+func GetAllCityWeatherInsertDB() {
 	db := mysql.Connect()
 	var businessCityList []mysql.BusinessCityList
 	db.Select("city_id,city_name").Find(&businessCityList)

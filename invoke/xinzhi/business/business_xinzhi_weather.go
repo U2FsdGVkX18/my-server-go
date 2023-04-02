@@ -25,15 +25,13 @@ func GetAllCityWeather() {
 		weatherNow, err := GetWeatherNow(v.CityId)
 		if err != nil {
 			db.Create(&mysql.BusinessCityWeather{
-				CityName:       v.CityName,
-				WeatherNow:     "",
-				TemperatureNow: "",
-				DataUpdate:     "",
+				CityName: v.CityName,
 			})
 			logger.Write("GetAllCityWeather:", v.CityName, err)
 			continue
 		} else {
 			db.Create(&mysql.BusinessCityWeather{
+				CityId:         v.CityId,
 				CityName:       v.CityName,
 				WeatherNow:     weatherNow["text"],
 				TemperatureNow: weatherNow["temperature"],

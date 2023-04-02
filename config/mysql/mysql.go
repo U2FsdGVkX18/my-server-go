@@ -169,6 +169,7 @@ type BusinessCityList struct {
 
 type BusinessCityWeather struct {
 	ID             uint      `gorm:"primarykey"`
+	CityId         string    `gorm:"type:varchar(255);comment:城市ID"`
 	CityName       string    `gorm:"type:varchar(255);comment:城市简称"`
 	WeatherNow     string    `gorm:"type:varchar(255);comment:实时天气"`
 	TemperatureNow string    `gorm:"type:varchar(255);comment:实时温度"`

@@ -178,7 +178,6 @@ func GetTop250MovieRanking() {
 			parseUint, _ := strconv.ParseUint(matchString, 10, 32)
 
 			var quote string
-			fmt.Println(selection.Find("div[class='bd']").Eq(0).Find("p").Length())
 			if selection.Find("div[class='bd']").Eq(0).Find("p").Length() < 2 {
 				quote = ""
 			} else {

@@ -9,6 +9,7 @@ import (
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
+	"my-server-go/invoke/xinzhi/business"
 	logger "my-server-go/tool/log"
 	"testing"
 )
@@ -89,6 +90,7 @@ func Test10(t *testing.T) {
 
 func Test11(t *testing.T) {
 	mysql.CreateTables()
+
 }
 
 func Test12(t *testing.T) {
@@ -103,5 +105,8 @@ func Test12(t *testing.T) {
 
 func Test13(t *testing.T) {
 	//notion.SyncMovieNowShowing()
-	
+	db := mysql.Connect()
+	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", "business_city_weathers"))
+	business.GetAllCityWeather()
+
 }

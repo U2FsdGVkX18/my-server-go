@@ -159,13 +159,36 @@ type DoubanBookHighsalesPublish struct {
 	CreatedAt  time.Time `gorm:"comment:创建时间"`
 }
 
+type BusinessCityList struct {
+	ID             uint   `gorm:"primarykey"`
+	CityId         string `gorm:"type:varchar(255);comment:城市ID"`
+	Administrative string `gorm:"type:varchar(255);comment:行政归属"`
+	CityName       string `gorm:"type:varchar(255);comment:城市简称"`
+	CityPinyin     string `gorm:"type:varchar(255);comment:城市拼音"`
+}
+
+type BusinessCityWeather struct {
+	ID             uint      `gorm:"primarykey"`
+	CityName       string    `gorm:"type:varchar(255);comment:城市简称"`
+	WeatherNow     string    `gorm:"type:varchar(255);comment:实时天气"`
+	TemperatureNow string    `gorm:"type:varchar(255);comment:实时温度"`
+	UvToday        string    `gorm:"type:varchar(255);comment:当日紫外线"`
+	DressToday     string    `gorm:"type:varchar(255);comment:当日穿衣指标"`
+	FluToday       string    `gorm:"type:varchar(255);comment:当日是否容易感冒"`
+	TravelToday    string    `gorm:"type:varchar(255);comment:当日是否适合旅游"`
+	SportToday     string    `gorm:"type:varchar(255);comment:当日是否适合运动"`
+	CarWashToday   string    `gorm:"type:varchar(255);comment:当日是否适合洗车"`
+	DataUpdate     string    `gorm:"comment:数据更新时间"`
+	CreatedAt      time.Time `gorm:"comment:创建时间"`
+}
+
 func CreateTables() {
 	db := Connect()
 	//初始化表,当表不存在则创建表
 	//err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
 	//	&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
 	//	&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})
-	err := db.AutoMigrate(&QywxUserLocation{})
+	err := db.AutoMigrate(&BusinessCityWeather{})
 	if err != nil {
 		log.Write("db AutoMigrate err:", err)
 	}

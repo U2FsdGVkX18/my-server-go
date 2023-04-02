@@ -6,6 +6,7 @@ import (
 	"my-server-go/invoke/douban"
 	"my-server-go/invoke/notion"
 	wx2 "my-server-go/invoke/wx"
+	"my-server-go/invoke/xinzhi/business"
 	"my-server-go/service/wx"
 	logger "my-server-go/tool/log"
 )
@@ -71,6 +72,7 @@ type everyHour struct{}
 
 func (everyHour *everyHour) Run() {
 	wx.SendMessageEveryHour()
+	business.GetAllCityWeather()
 }
 
 type everyNight struct{}

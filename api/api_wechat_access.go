@@ -106,6 +106,12 @@ func WeChatAccess(ginServer *gin.Engine) {
 			return
 		})
 	}
+	var businessGroup = ginServer.Group("/business")
+	{
+		businessGroup.POST("/getCity", func(context *gin.Context) {
+			
+		})
+	}
 }
 
 // VerifyUrl 验证url

@@ -21,6 +21,7 @@ func GetAllCityWeather() {
 	var businessCityList []mysql.BusinessCityList
 	db.Select("city_id,city_name").Find(&businessCityList)
 	for _, v := range businessCityList {
+		time.Sleep(3 * time.Second)
 		weatherNow, err := GetWeatherNow(v.CityId)
 		if err != nil {
 			db.Create(&mysql.BusinessCityWeather{
@@ -38,7 +39,6 @@ func GetAllCityWeather() {
 				TemperatureNow: weatherNow["temperature"],
 				DataUpdate:     weatherNow["last_update"],
 			})
-			time.Sleep(3 * time.Second)
 		}
 	}
 }

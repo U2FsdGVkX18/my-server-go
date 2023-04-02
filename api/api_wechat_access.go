@@ -110,6 +110,7 @@ func WeChatAccess(ginServer *gin.Engine) {
 	var businessGroup = ginServer.Group("/business")
 	{
 		businessGroup.POST("/getCity", func(context *gin.Context) {
+			logger.Write("调用/getCity接口")
 			//获取城市数据
 			citys := business.GetRainCity()
 			context.JSON(http.StatusOK, citys)

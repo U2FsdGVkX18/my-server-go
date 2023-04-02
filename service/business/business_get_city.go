@@ -1,12 +1,15 @@
 package business
 
 import (
+	"encoding/json"
 	"my-server-go/config/mysql"
+	"my-server-go/config/redis"
 	logger "my-server-go/tool/log"
+	"time"
 )
 
-// GetRainCity 从DB中获取正在下雨的城市并返回数组
-func GetRainCity() []string {
+// GetRainCityForMysql 从DB中获取正在下雨的城市并插入redis
+func GetRainCityForMysql() {
 	db := mysql.Connect()
 	var businessCityList []mysql.BusinessCityList
 	db.Select("city_id").Find(&businessCityList)
@@ -26,5 +29,12 @@ func GetRainCity() []string {
 		}
 		citys = append(citys, cityName)
 	}
-	return citys
+	marshal, _ := json.Marshal(citys)
+	redis.SetValue("businessRainCity", marshal, 3000*1000*time.Millisecond)
+	logger.Write("rainCity数据写入redis")
+}
+
+// GetRainCityForRedis 从redis中获取正在下雨的城市并返回给接口
+func GetRainCityForRedis() string {
+	return redis.GetValue("businessRainCity")
 }

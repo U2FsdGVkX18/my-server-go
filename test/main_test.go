@@ -110,6 +110,6 @@ func Test13(t *testing.T) {
 	//business.GetAllCityWeatherInsertDB()
 }
 func Test14(t *testing.T) {
-	city := business.GetRainCity()
-	fmt.Println(city)
+	//business.GetRainCityForMysql()
+	business.GetRainCityForRedis()
 }

@@ -7,6 +7,7 @@ import (
 	"my-server-go/invoke/notion"
 	wx2 "my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi/business"
+	business2 "my-server-go/service/business"
 	"my-server-go/service/wx"
 	logger "my-server-go/tool/log"
 )
@@ -58,7 +59,11 @@ func Job() {
 	if err != nil {
 		logger.Write("EveryMonthZero定时任务执行err", err)
 	}
-
+	//配置定时任务7
+	_, err = c.AddJob("0 0/30 * * * ?", &businessEveryHour{})
+	if err != nil {
+		logger.Write("BusinessEveryHour定时任务执行err", err)
+	}
 	c.Start()
 }
 
@@ -72,7 +77,6 @@ type everyHour struct{}
 
 func (everyHour *everyHour) Run() {
 	wx.SendMessageEveryHour()
-	business.GetAllCityWeatherInsertDB()
 }
 
 type everyNight struct{}
@@ -154,4 +158,11 @@ func (everyMonthTwo *everyMonthTwo) Run() {
 		"TOP250读书数据同步notion结束" + "\n" +
 		""
 	wx2.SendWxMessage(message2)
+}
+
+type businessEveryHour struct{}
+
+func (businessEveryHour *businessEveryHour) Run() {
+	business.GetAllCityWeatherInsertDB()
+	business2.GetRainCityForMysql()
 }

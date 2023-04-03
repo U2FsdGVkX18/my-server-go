@@ -40,6 +40,7 @@ func GetAllCityWeatherInsertDB() {
 			})
 		}
 	}
+	logger.Write("GetAllCityWeatherInsertDB 数据爬取完成")
 }
 
 // GetWeatherNow 获取天气实况(位置,天气,温度)

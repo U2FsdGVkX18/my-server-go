@@ -18,7 +18,7 @@ func GetRainCityForMysql() {
 		var cityName string
 		err := db.Model(&mysql.BusinessCityWeather{}).Select("city_name").
 			Where("city_id = ? AND weather_now LIKE ?", v.CityId, "%雨%").
-			Order("ABS(TIMESTAMPDIFF(SECOND, NOW(), created_at))").
+			Order("created_at DESC").
 			Limit(1).Scan(&cityName).Error
 		if err != nil {
 			logger.Write(err)
@@ -31,7 +31,7 @@ func GetRainCityForMysql() {
 	}
 	marshal, _ := json.Marshal(citys)
 	redis.SetValue("businessRainCity", marshal, 3000*1000*time.Millisecond)
-	logger.Write("rainCity数据写入redis")
+	logger.Write("businessRainCity数据写入redis")
 }
 
 // GetRainCityForRedis 从redis中获取正在下雨的城市并返回给接口

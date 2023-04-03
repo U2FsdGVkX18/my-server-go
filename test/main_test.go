@@ -106,10 +106,18 @@ func Test12(t *testing.T) {
 func Test13(t *testing.T) {
 	//notion.SyncMovieNowShowing()
 	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", "business_city_weathers"))
+	//db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", "business_city_weathers"))
+	//var cityName string
+	var businesslist []mysql.BusinessCityWeather
+	db.Model(&mysql.BusinessCityWeather{}).Select("city_name,weather_now,created_at").
+		Where("city_id = ? AND weather_now LIKE ?", "WX38NPJ1DP88", "%雨%").
+		Order("created_at DESC").Find(&businesslist)
+	//Limit(1).Scan(&cityName)
+	fmt.Println(businesslist)
 	//business.GetAllCityWeatherInsertDB()
 }
 func Test14(t *testing.T) {
 	//business.GetRainCityForMysql()
 	business.GetRainCityForRedis()
+
 }

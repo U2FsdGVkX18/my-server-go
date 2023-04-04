@@ -153,13 +153,9 @@ func GetTop250MovieRanking() {
 	for i := 0; i <= 225; i += 25 {
 		url := "https://movie.douban.com/top250?start=" + strconv.Itoa(i) + "&filter="
 		resp := invoke.SendGet(url, nil, GetHeader())
-
-		//defer关闭io流
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(resp.Body)
-
 		doc, err := goquery.NewDocumentFromReader(resp.Body)
+		//defer关闭io流
+		resp.Body.Close()
 		if err != nil {
 			logger.Write("GetTop250MovieRanking goquery.NewDocumentFromReader异常:", err)
 		}
@@ -212,11 +208,9 @@ func GetHighScoreTVShowRanking() {
 		headers["Referer"] = "https://movie.douban.com/tv/"
 		resp := invoke.SendGet(url, nil, headers)
 
-		//defer关闭io流
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(resp.Body)
 		body, _ := io.ReadAll(resp.Body)
+		//defer关闭io流
+		resp.Body.Close()
 		items := gjson.Get(string(body), "items").Array()
 		for _, item := range items {
 			name := item.Get("title").String()
@@ -260,11 +254,9 @@ func GetTop250BookRanking() {
 		url := "https://book.douban.com/top250?start=" + strconv.Itoa(i)
 		resp := invoke.SendGet(url, nil, GetHeader())
 
-		//defer关闭io流
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(resp.Body)
 		doc, err := goquery.NewDocumentFromReader(resp.Body)
+		//defer关闭io流
+		resp.Body.Close()
 		if err != nil {
 			logger.Write("GetTop250BookRanking goquery.NewDocumentFromReader异常:", err)
 		}
@@ -315,12 +307,9 @@ func GetHotTestPublishBookRanking() {
 		marshal, _ := json.Marshal(params)
 		resp := invoke.SendPost(url, marshal, GetHeaderPost())
 
-		//defer关闭io流
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(resp.Body)
 		body, _ := io.ReadAll(resp.Body)
-
+		//defer关闭io流
+		resp.Body.Close()
 		for _, item := range gjson.Get(string(body), "list").Array() {
 			name := item.Get("title").String()
 			authors := ""
@@ -381,12 +370,9 @@ func GetHighSalesPublishBookRanking() {
 		marshal, _ := json.Marshal(params)
 		resp := invoke.SendPost(url, marshal, GetHeaderPost())
 
-		//defer关闭io流
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(resp.Body)
 		body, _ := io.ReadAll(resp.Body)
-
+		//defer关闭io流
+		resp.Body.Close()
 		for _, item := range gjson.Get(string(body), "list").Array() {
 			name := item.Get("title").String()
 			authors := ""
@@ -446,13 +432,10 @@ func GetHotTestOriginalBookRanking() {
 		params["sort"] = "hot"
 		marshal, _ := json.Marshal(params)
 		resp := invoke.SendPost(url, marshal, GetHeaderPost())
-
-		//defer关闭io流
-		defer func(Body io.ReadCloser) {
-			_ = Body.Close()
-		}(resp.Body)
+		
 		body, _ := io.ReadAll(resp.Body)
-
+		//defer关闭io流
+		resp.Body.Close()
 		for _, item := range gjson.Get(string(body), "list").Array() {
 			name := item.Get("title").String()
 			authors := ""

@@ -183,13 +183,35 @@ type BusinessCityWeather struct {
 	CreatedAt      time.Time `gorm:"comment:创建时间"`
 }
 
+// BusinessTrialActivationCode 试用激活码表
+type BusinessTrialActivationCode struct {
+	ID        uint      `gorm:"primaryKey"`
+	Code      string    `gorm:"unique;not null;comment:uuid激活码"`
+	StartDate time.Time `gorm:"not null;comment:激活码开始时间"`
+	EndDate   time.Time `gorm:"not null;comment:激活码结束时间"`
+	IsUsed    bool      `gorm:"not null;comment:是否已被使用"`
+	CreatedAt time.Time `gorm:"comment:创建时间"`
+	UpdatedAt time.Time `gorm:"comment:更新时间"`
+}
+
+// BusinessRegularActivationCode 正式激活码表
+type BusinessRegularActivationCode struct {
+	ID        uint      `gorm:"primaryKey"`
+	Code      string    `gorm:"unique;not null;comment:uuid激活码"`
+	StartDate time.Time `gorm:"not null;comment:激活码开始时间"`
+	EndDate   time.Time `gorm:"not null;comment:激活码结束时间"`
+	IsUsed    bool      `gorm:"not null;comment:是否已被使用"`
+	CreatedAt time.Time `gorm:"comment:创建时间"`
+	UpdatedAt time.Time `gorm:"comment:更新时间"`
+}
+
 func CreateTables() {
 	db := Connect()
 	//初始化表,当表不存在则创建表
 	//err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
 	//	&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
 	//	&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})
-	err := db.AutoMigrate(&BusinessCityWeather{})
+	err := db.AutoMigrate(&BusinessTrialActivationCode{}, &BusinessRegularActivationCode{})
 	if err != nil {
 		log.Write("db AutoMigrate err:", err)
 	}

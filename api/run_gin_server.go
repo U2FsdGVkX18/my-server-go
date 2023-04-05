@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"my-server-go/api/business"
 	"my-server-go/config/schedule"
 )
 
@@ -11,7 +12,7 @@ func Run() {
 	var ginServer = gin.Default()
 	//调用函数创建路由
 	WeChatAccess(ginServer)
-	BusinessCityData(ginServer)
+	business.BusinessCityData(ginServer)
 	Prometheus(ginServer)
 	//启动服务
 	err := ginServer.Run(":8000")

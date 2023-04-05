@@ -30,11 +30,17 @@ func GetRainCityForMysql() {
 		citys = append(citys, cityName)
 	}
 	marshal, _ := json.Marshal(citys)
-	redis.SetValue("businessRainCity", marshal, 3000*1000*time.Millisecond)
+	redis.SetValue("businessRainCity", marshal, 2400*1000*time.Millisecond)
 	logger.Write("businessRainCity数据写入redis完成")
 }
 
 // GetRainCityForRedis 从redis中获取正在下雨的城市并返回给接口
-func GetRainCityForRedis() string {
-	return redis.GetValue("businessRainCity")
+func GetRainCityForRedis() []string {
+	value := redis.GetValue("businessRainCity")
+	var data []string
+	err := json.Unmarshal([]byte(value), &data)
+	if err != nil {
+		return data
+	}
+	return data
 }

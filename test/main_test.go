@@ -9,7 +9,8 @@ import (
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
-	"my-server-go/service/business"
+	"my-server-go/invoke/xinzhi/business"
+	business2 "my-server-go/tool/business"
 	logger "my-server-go/tool/log"
 	"testing"
 )
@@ -118,6 +119,13 @@ func Test13(t *testing.T) {
 }
 func Test14(t *testing.T) {
 	//business.GetRainCityForMysql()
-	business.GetRainCityForRedis()
+	//business.GetRainCityForRedis()
+	now, err := business.GetWeatherNow("WSQQMXBCC2VS")
+	fmt.Println(now, err)
 
+}
+
+func Test15(t *testing.T) {
+	business2.TrialActivationCodeInsertDB()
+	business2.RegularActivationCodeInsertDB()
 }

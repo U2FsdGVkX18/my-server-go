@@ -12,7 +12,7 @@ func Run() {
 	var ginServer = gin.Default()
 	//调用函数创建路由
 	WeChatAccess(ginServer)
-	business.BusinessCityData(ginServer)
+	business.RainCityData(ginServer)
 	Prometheus(ginServer)
 	//启动服务
 	err := ginServer.Run(":8000")

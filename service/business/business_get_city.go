@@ -30,6 +30,7 @@ func GetRainCityForMysql() {
 		citys = append(citys, cityName)
 	}
 	marshal, _ := json.Marshal(citys)
+	//插入redis
 	redis.SetValue("businessRainCity", marshal, 2400*1000*time.Millisecond)
 	logger.Write("businessRainCity数据写入redis完成")
 }

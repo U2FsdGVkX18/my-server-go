@@ -22,12 +22,12 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-func BusinessCityData(ginServer *gin.Engine) {
+func RainCityData(ginServer *gin.Engine) {
 	ginServer.Use(CORSMiddleware())
 	var businessGroup = ginServer.Group("/business")
 	{
 		businessGroup.GET("/getRainCity", func(context *gin.Context) {
-			logger.Write("扩展程序调用getRainCity接口")
+			logger.Write("调用getRainCity接口")
 			//从redis中获取城市数据
 			data := business.GetRainCityForRedis()
 			context.JSON(http.StatusOK, data)

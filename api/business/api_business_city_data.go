@@ -40,7 +40,7 @@ func RainCityData(ginServer *gin.Engine) {
 				context.JSON(http.StatusOK, gin.H{"status": status})
 				return
 			} else {
-				context.JSON(http.StatusOK, gin.H{"status": false})
+				context.JSON(http.StatusOK, gin.H{"status": 2})
 				return
 			}
 		})

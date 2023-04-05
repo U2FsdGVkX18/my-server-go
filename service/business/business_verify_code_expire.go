@@ -36,5 +36,6 @@ func CheckActivationCodeIsExpire(code string) bool {
 		}
 	}
 
+	//过期
 	return true
 }

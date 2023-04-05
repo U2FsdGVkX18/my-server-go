@@ -1,6 +1,7 @@
 package business
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"my-server-go/config/mysql"
 	"time"
@@ -12,6 +13,7 @@ func TrialActivationCodeInsertDB() {
 	//生成50个
 	codes := generateBatchActivationCodes(20)
 	for _, code := range codes {
+		fmt.Println(code)
 		var businessTrialActivationCode = mysql.BusinessTrialActivationCode{
 			Code:      code,
 			StartDate: time.Now(),

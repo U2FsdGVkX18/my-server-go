@@ -5,7 +5,18 @@ import (
 	"time"
 )
 
-func CheckActivationCode(code string) bool {
+type Status int
+
+const (
+	// Active 已激活
+	Active Status = iota
+	// Inactive 未激活
+	Inactive
+	// Invalid 无效
+	Invalid
+)
+
+func CheckActivationCode(code string) Status {
 	db := mysql.Connect()
 	//查询试用激活码是否存在
 	//试用激活码
@@ -23,10 +34,10 @@ func CheckActivationCode(code string) bool {
 			businessTrialActivationCode.EndDate = time.Now().AddDate(0, 0, 1)
 			//更新数据库
 			db.Save(&businessTrialActivationCode)
-			return true
+			return Inactive
 		} else {
 			//已使用
-			return false
+			return Active
 		}
 	}
 
@@ -43,11 +54,11 @@ func CheckActivationCode(code string) bool {
 			businessRegularActivationCode.EndDate = time.Now().AddDate(50, 0, 0)
 			//更新数据库
 			db.Save(&businessRegularActivationCode)
-			return true
+			return Inactive
 		} else {
-			return false
+			return Active
 		}
 	}
 	//如果都不满足则返回false
-	return false
+	return Invalid
 }

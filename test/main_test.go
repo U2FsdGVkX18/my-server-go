@@ -10,7 +10,6 @@ import (
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
 	"my-server-go/invoke/xinzhi/business"
-	business2 "my-server-go/service/business"
 	logger "my-server-go/tool/log"
 	"testing"
 )
@@ -128,9 +127,19 @@ func Test14(t *testing.T) {
 func Test15(t *testing.T) {
 	//db := mysql.Connect()
 	//mysql.CreateTables()
-	//business2.TrialActivationCodeInsertDB()
-	//business2.RegularActivationCodeInsertDB()
+	//business3.TrialActivationCodeInsertDB()
+	//business3.RegularActivationCodeInsertDB()
 
-	status := business2.CheckActivationCodeIsExpire("33e032e2-e498-4db6-9ed8-a012613f884e")
-	fmt.Println(status)
+	//status := business2.CheckActivationCodeIsExpire("33e032e2-e498-4db6-9ed8-a012613f884e")
+	//fmt.Println(status)
+	type Status int
+	const (
+		// Active 已激活
+		Active int = iota
+		// Inactive 未激活
+		Inactive
+		// Invalid 无效
+		Invalid
+	)
+	fmt.Println(Active, Inactive, Invalid)
 }

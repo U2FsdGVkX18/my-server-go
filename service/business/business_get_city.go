@@ -18,7 +18,6 @@ func GetRainCityForMysql() {
 		var cityName string
 		err := db.Model(&mysql.BusinessCityWeather{}).Select("city_name").
 			Where("city_id = ? AND weather_now LIKE ?", v.CityId, "%雨%").
-			Order("created_at DESC").
 			Limit(1).Scan(&cityName).Error
 		if err != nil {
 			logger.Write(err)

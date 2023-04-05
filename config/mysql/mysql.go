@@ -187,8 +187,8 @@ type BusinessCityWeather struct {
 type BusinessTrialActivationCode struct {
 	ID        uint      `gorm:"primaryKey"`
 	Code      string    `gorm:"unique;not null;comment:uuid激活码"`
-	StartDate time.Time `gorm:"not null;comment:激活码开始时间"`
-	EndDate   time.Time `gorm:"not null;comment:激活码结束时间"`
+	StartDate time.Time `gorm:"comment:激活码开始时间"`
+	EndDate   time.Time `gorm:"comment:激活码结束时间"`
 	IsUsed    bool      `gorm:"not null;comment:是否已被使用"`
 	CreatedAt time.Time `gorm:"comment:创建时间"`
 	UpdatedAt time.Time `gorm:"comment:更新时间"`
@@ -198,8 +198,8 @@ type BusinessTrialActivationCode struct {
 type BusinessRegularActivationCode struct {
 	ID        uint      `gorm:"primaryKey"`
 	Code      string    `gorm:"unique;not null;comment:uuid激活码"`
-	StartDate time.Time `gorm:"not null;comment:激活码开始时间"`
-	EndDate   time.Time `gorm:"not null;comment:激活码结束时间"`
+	StartDate time.Time `gorm:"comment:激活码开始时间"`
+	EndDate   time.Time `gorm:"comment:激活码结束时间"`
 	IsUsed    bool      `gorm:"not null;comment:是否已被使用"`
 	CreatedAt time.Time `gorm:"comment:创建时间"`
 	UpdatedAt time.Time `gorm:"comment:更新时间"`

@@ -10,12 +10,12 @@ import (
 func TrialActivationCodeInsertDB() {
 	db := mysql.Connect()
 	//生成50个
-	codes := generateBatchActivationCodes(10)
+	codes := generateBatchActivationCodes(20)
 	for _, code := range codes {
 		var businessTrialActivationCode = mysql.BusinessTrialActivationCode{
 			Code:      code,
 			StartDate: time.Now(),
-			EndDate:   time.Now().AddDate(0, 0, 1),
+			EndDate:   time.Now(),
 			IsUsed:    false,
 		}
 		db.Create(&businessTrialActivationCode)
@@ -26,12 +26,12 @@ func TrialActivationCodeInsertDB() {
 func RegularActivationCodeInsertDB() {
 	db := mysql.Connect()
 	//生成50个
-	codes := generateBatchActivationCodes(10)
+	codes := generateBatchActivationCodes(20)
 	for _, code := range codes {
 		var businessRegularActivationCode = mysql.BusinessRegularActivationCode{
 			Code:      code,
 			StartDate: time.Now(),
-			EndDate:   time.Now().AddDate(5, 0, 0),
+			EndDate:   time.Now(),
 			IsUsed:    false,
 		}
 		db.Create(&businessRegularActivationCode)

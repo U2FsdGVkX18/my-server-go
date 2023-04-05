@@ -1,6 +1,9 @@
 package business
 
-import "my-server-go/config/mysql"
+import (
+	"my-server-go/config/mysql"
+	"time"
+)
 
 func CheckActivationCode(code string) bool {
 	db := mysql.Connect()
@@ -12,6 +15,10 @@ func CheckActivationCode(code string) bool {
 		if !businessTrialActivationCode.IsUsed {
 			//标记为已使用
 			businessTrialActivationCode.IsUsed = true
+			//插入当前时间
+			businessTrialActivationCode.StartDate = time.Now()
+			//插入过期时间
+			businessTrialActivationCode.EndDate = time.Now().AddDate(0, 0, 1)
 			//更新数据库
 			db.Save(&businessTrialActivationCode)
 			return true
@@ -27,6 +34,10 @@ func CheckActivationCode(code string) bool {
 		if !businessRegularActivationCode.IsUsed {
 			//标记为已使用
 			businessRegularActivationCode.IsUsed = true
+			//插入当前时间
+			businessRegularActivationCode.StartDate = time.Now()
+			//插入过期时间
+			businessRegularActivationCode.EndDate = time.Now().AddDate(50, 0, 0)
 			//更新数据库
 			db.Save(&businessRegularActivationCode)
 			return true

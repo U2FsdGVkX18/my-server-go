@@ -34,10 +34,15 @@ func RainCityData(ginServer *gin.Engine) {
 		})
 		businessGroup.GET("/verifyCode/:code", func(context *gin.Context) {
 			code := context.Param("code")
-			logger.Write("调用verifyCode接口,接收到的code为:", code)
-			status := business.CheckActivationCode(code)
-			context.JSON(http.StatusOK, gin.H{"status": status})
-			return
+			if len(code) == 36 {
+				logger.Write("调用verifyCode接口,接收到的code为:", code)
+				status := business.CheckActivationCode(code)
+				context.JSON(http.StatusOK, gin.H{"status": status})
+				return
+			} else {
+				context.JSON(http.StatusOK, gin.H{"status": false})
+				return
+			}
 		})
 	}
 }

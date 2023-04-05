@@ -44,5 +44,17 @@ func RainCityData(ginServer *gin.Engine) {
 				return
 			}
 		})
+		businessGroup.GET("/verifyCodeExpire/:code", func(context *gin.Context) {
+			code := context.Param("code")
+			if len(code) == 36 {
+				logger.Write("调用verifyCodeExpire接口,接收到的code为:", code)
+				status := business.CheckActivationCodeIsExpire(code)
+				context.JSON(http.StatusOK, gin.H{"status": status})
+				return
+			} else {
+				context.JSON(http.StatusOK, gin.H{"status": true})
+				return
+			}
+		})
 	}
 }

@@ -12,7 +12,9 @@ func CheckActivationCode(code string) bool {
 	var businessTrialActivationCode mysql.BusinessTrialActivationCode
 	result1 := db.Where("code = ?", code).First(&businessTrialActivationCode)
 	if result1.RowsAffected == 1 {
+		//判断激活码是否被使用
 		if !businessTrialActivationCode.IsUsed {
+			//未使用
 			//标记为已使用
 			businessTrialActivationCode.IsUsed = true
 			//插入当前时间
@@ -23,6 +25,7 @@ func CheckActivationCode(code string) bool {
 			db.Save(&businessTrialActivationCode)
 			return true
 		} else {
+			//已使用
 			return false
 		}
 	}

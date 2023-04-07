@@ -37,7 +37,7 @@ func GetRainCityForMysql() {
 // GetRainCityForRedis 从redis中获取正在下雨的城市并返回给接口
 func GetRainCityForRedis() []string {
 	value := redis.GetValue("businessRainCity")
-	var data []string
+	data := make([]string, 0)
 	err := json.Unmarshal([]byte(value), &data)
 	if err != nil {
 		return data

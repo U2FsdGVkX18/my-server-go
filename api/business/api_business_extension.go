@@ -21,7 +21,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-func RainCityData(ginServer *gin.Engine) {
+func ExtensionInterface(ginServer *gin.Engine) {
 	ginServer.Use(CORSMiddleware())
 	var businessGroup = ginServer.Group("/business")
 	{

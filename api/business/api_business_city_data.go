@@ -29,7 +29,7 @@ func RainCityData(ginServer *gin.Engine) {
 			logger.Write("调用getRainCity接口")
 			//从redis中获取城市数据
 			data := business.GetRainCityForRedis()
-			context.JSON(http.StatusOK, data)
+			context.JSON(http.StatusOK, gin.H{"data": data})
 			return
 		})
 		businessGroup.GET("/verifyCode/:code", func(context *gin.Context) {

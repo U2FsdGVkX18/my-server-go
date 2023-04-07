@@ -7,6 +7,7 @@ import (
 
 type Status int
 
+// 定义状态枚举
 const (
 	// Active 已激活
 	Active Status = iota

@@ -119,8 +119,10 @@ func Test13(t *testing.T) {
 func Test14(t *testing.T) {
 	//business.GetRainCityForMysql()
 	//business.GetRainCityForRedis()
-	now, err := business.GetWeatherNow("WSQQMXBCC2VS")
+	now, err := business.GetWeatherNow("岳阳")
+	//weatherNow := xinzhi.GetWeatherNow("岳阳")
 	fmt.Println(now, err)
+	//fmt.Println(weatherNow)
 
 }
 

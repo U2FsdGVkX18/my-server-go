@@ -30,6 +30,9 @@ func GetRainCityForMysql() {
 			logger.Write(err)
 			continue
 		}
+		if result.CityName == "" {
+			continue
+		}
 		citys = append(citys, result)
 	}
 	marshal, _ := json.Marshal(citys)

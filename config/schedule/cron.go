@@ -60,7 +60,7 @@ func Job() {
 		logger.Write("EveryMonthZero定时任务执行err", err)
 	}
 	//配置定时任务7
-	_, err = c.AddJob("0 0/40 * * * ?", &businessEveryHour{})
+	_, err = c.AddJob("0 0/30 * * * ?", &businessEveryHour{})
 	if err != nil {
 		logger.Write("BusinessEveryHour定时任务执行err", err)
 	}

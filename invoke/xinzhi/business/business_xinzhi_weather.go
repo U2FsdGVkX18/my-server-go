@@ -25,12 +25,14 @@ func GetAllCityWeatherInsertDB() {
 	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 
 	var businessCityList []mysql.BusinessCityList
-	db.Select("city_id,city_name").Find(&businessCityList)
+	db.Select("city_id,area,province,city_name").Find(&businessCityList)
 	for _, v := range businessCityList {
 		time.Sleep(3 * time.Second)
 		weatherNow, err := GetWeatherNow(v.CityId)
 		if err != nil {
 			db.Create(&mysql.BusinessCityWeather{
+				Area:     v.Area,
+				Province: v.Province,
 				CityName: v.CityName,
 			})
 			logger.Write("GetAllCityWeather:", v.CityName, err)
@@ -38,6 +40,8 @@ func GetAllCityWeatherInsertDB() {
 		} else {
 			db.Create(&mysql.BusinessCityWeather{
 				CityId:         v.CityId,
+				Area:           v.Area,
+				Province:       v.Province,
 				CityName:       v.CityName,
 				WeatherNow:     weatherNow["text"],
 				TemperatureNow: weatherNow["temperature"],

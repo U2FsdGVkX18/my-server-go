@@ -9,7 +9,7 @@ import (
 	"my-server-go/invoke/tianxing"
 	"my-server-go/invoke/wx"
 	"my-server-go/invoke/xinzhi"
-	"my-server-go/service/business"
+	business2 "my-server-go/tool/business"
 	logger "my-server-go/tool/log"
 	"testing"
 )
@@ -117,16 +117,26 @@ func Test13(t *testing.T) {
 	//business.GetAllCityWeatherInsertDB()
 }
 func Test14(t *testing.T) {
-	//business.GetRainCityForMysql()
-	forRedis := business.GetRainCityForRedis()
-	fmt.Println(forRedis)
+	db := mysql.Connect()
+	type Result struct {
+		area     string
+		province string
+		cityName string
+	}
+	var result Result
+	err := db.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
+		Where("city_id = ? AND weather_now LIKE ?", "WX4FBXXFKE4F", "%雨%").
+		Limit(1).Scan(&result).Error
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(result)
+
 }
 
 func Test15(t *testing.T) {
 	//db := mysql.Connect()
 	//mysql.CreateTables()
-	//business3.TrialActivationCodeInsertDB()
-	//business3.RegularActivationCodeInsertDB()
 
 	//status := business2.CheckActivationCodeIsExpire("33e032e2-e498-4db6-9ed8-a012613f884e")
 	//fmt.Println(status)
@@ -140,4 +150,12 @@ func Test15(t *testing.T) {
 		Invalid
 	)
 	fmt.Println(Active, Inactive, Invalid)
+}
+
+// 生成激活码
+func TestGenCode(t *testing.T) {
+	//试用
+	business2.TrialActivationCodeInsertDB()
+	//正式
+	//business2.RegularActivationCodeInsertDB()
 }

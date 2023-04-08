@@ -163,6 +163,8 @@ type BusinessCityList struct {
 	ID             uint   `gorm:"primarykey"`
 	CityId         string `gorm:"type:varchar(255);comment:城市ID"`
 	Administrative string `gorm:"type:varchar(255);comment:行政归属"`
+	Area           string `gorm:"type:varchar(255);comment:地区"`
+	Province       string `gorm:"type:varchar(255);comment:省市"`
 	CityName       string `gorm:"type:varchar(255);comment:城市简称"`
 	CityPinyin     string `gorm:"type:varchar(255);comment:城市拼音"`
 }
@@ -170,6 +172,8 @@ type BusinessCityList struct {
 type BusinessCityWeather struct {
 	ID             uint      `gorm:"primarykey"`
 	CityId         string    `gorm:"type:varchar(255);comment:城市ID"`
+	Area           string    `gorm:"type:varchar(255);comment:地区"`
+	Province       string    `gorm:"type:varchar(255);comment:省市"`
 	CityName       string    `gorm:"type:varchar(255);comment:城市简称"`
 	WeatherNow     string    `gorm:"type:varchar(255);comment:实时天气"`
 	TemperatureNow string    `gorm:"type:varchar(255);comment:实时温度"`
@@ -211,7 +215,7 @@ func CreateTables() {
 	//err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
 	//	&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
 	//	&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})
-	err := db.AutoMigrate(&BusinessTrialActivationCode{}, &BusinessRegularActivationCode{})
+	err := db.AutoMigrate(&BusinessCityWeather{})
 	if err != nil {
 		log.Write("db AutoMigrate err:", err)
 	}

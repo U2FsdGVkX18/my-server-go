@@ -8,25 +8,28 @@ import (
 	"time"
 )
 
+type Result struct {
+	Area     string
+	Province string
+	CityName string
+}
+
 // GetRainCityForMysql 从DB中获取正在下雨的城市并插入redis
 func GetRainCityForMysql() {
 	db := mysql.Connect()
 	var businessCityList []mysql.BusinessCityList
 	db.Select("city_id").Find(&businessCityList)
-	var citys []string
+	var citys []Result
 	for _, v := range businessCityList {
-		var cityName string
-		err := db.Model(&mysql.BusinessCityWeather{}).Select("city_name").
+		var result Result
+		err := db.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
 			Where("city_id = ? AND weather_now LIKE ?", v.CityId, "%雨%").
-			Limit(1).Scan(&cityName).Error
+			Limit(1).Scan(&result).Error
 		if err != nil {
 			logger.Write(err)
 			continue
 		}
-		if cityName == "" {
-			continue
-		}
-		citys = append(citys, cityName)
+		citys = append(citys, result)
 	}
 	marshal, _ := json.Marshal(citys)
 	//插入redis

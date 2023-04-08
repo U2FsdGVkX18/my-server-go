@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Result 定义查询数据库部分字段的结构体
 type Result struct {
 	Area     string
 	Province string
@@ -38,9 +39,9 @@ func GetRainCityForMysql() {
 }
 
 // GetRainCityForRedis 从redis中获取正在下雨的城市并返回给接口
-func GetRainCityForRedis() []string {
+func GetRainCityForRedis() []Result {
 	value := redis.GetValue("businessRainCity")
-	data := make([]string, 0)
+	data := make([]Result, 0)
 	err := json.Unmarshal([]byte(value), &data)
 	if err != nil {
 		return data

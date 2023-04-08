@@ -1,6 +1,7 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"my-server-go/api"
 	"my-server-go/config/mysql"
@@ -12,6 +13,7 @@ import (
 	business2 "my-server-go/tool/business"
 	logger "my-server-go/tool/log"
 	"testing"
+	"time"
 )
 
 func TestOne(t *testing.T) {
@@ -119,19 +121,29 @@ func Test13(t *testing.T) {
 func Test14(t *testing.T) {
 	db := mysql.Connect()
 	type Result struct {
-		area     string
-		province string
-		cityName string
+		Area     string
+		Province string
+		CityName string
 	}
 	var result Result
+	var citys []Result
 	err := db.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
-		Where("city_id = ? AND weather_now LIKE ?", "WX4FBXXFKE4F", "%雨%").
+		Where("city_id = ? AND weather_now LIKE ?", "W7MHXVJCW6NC", "%雨%").
 		Limit(1).Scan(&result).Error
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(result)
+	citys = append(citys, result)
+	fmt.Println(citys)
+	marshal, _ := json.Marshal(citys)
+	fmt.Println(string(marshal))
+	redis.SetValue("businessRainCity1", marshal, 60*1000*time.Millisecond)
+	value := redis.GetValue("businessRainCity1")
+	fmt.Println(value)
+	data := make([]Result, 0)
+	json.Unmarshal([]byte(value), &data)
 
+	fmt.Println(data)
 }
 
 func Test15(t *testing.T) {

@@ -30,6 +30,7 @@ func GetRainCityForMysql() {
 			logger.Write(err)
 			continue
 		}
+		//查询记录会返回空的结果,这里进行过滤
 		if result.CityName == "" {
 			continue
 		}

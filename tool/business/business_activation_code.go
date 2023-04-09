@@ -8,7 +8,6 @@ import (
 
 // TrialActivationCodeInsertDB 插入试用激活码到DB
 func TrialActivationCodeInsertDB() {
-	db := mysql.Connect()
 	//生成50个
 	codes := generateBatchActivationCodes(20)
 	for _, code := range codes {
@@ -18,13 +17,12 @@ func TrialActivationCodeInsertDB() {
 			EndDate:   time.Now(),
 			IsUsed:    false,
 		}
-		db.Create(&businessTrialActivationCode)
+		mysql.DB.Create(&businessTrialActivationCode)
 	}
 }
 
 // RegularActivationCodeInsertDB 插入正式激活码到DB
 func RegularActivationCodeInsertDB() {
-	db := mysql.Connect()
 	//生成50个
 	codes := generateBatchActivationCodes(20)
 	for _, code := range codes {
@@ -34,7 +32,7 @@ func RegularActivationCodeInsertDB() {
 			EndDate:   time.Now(),
 			IsUsed:    false,
 		}
-		db.Create(&businessRegularActivationCode)
+		mysql.DB.Create(&businessRegularActivationCode)
 	}
 }
 

@@ -8,12 +8,31 @@ import (
 	"time"
 )
 
+// DB 设置全局变量并导出
+var DB *gorm.DB
+
+// 初始化连接
+func init() {
+	DB = Connect()
+}
+
 func Connect() *gorm.DB {
 	dsn := "lihongwei:mujin1110@tcp(125.91.35.185:3306)/my_server?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
 	if err != nil {
 		log.Write("failed to connect database:", err)
 	}
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Write("failed to get SQL DB:", err)
+	}
+	//设置最大空闲连接数
+	sqlDB.SetMaxIdleConns(20)
+	//设置最大打开连接数
+	sqlDB.SetMaxOpenConns(200)
+	//设置连接的最长生命周期,超过这个时间的连接将被关闭
+	sqlDB.SetConnMaxLifetime(time.Hour)
+
 	return db
 }
 
@@ -210,12 +229,11 @@ type BusinessRegularActivationCode struct {
 }
 
 func CreateTables() {
-	db := Connect()
 	//初始化表,当表不存在则创建表
 	//err := db.AutoMigrate(&Scheduled{}, &QywxUserLocation{}, &DoubanTvshowHighscore{}, &DoubanNewmovieRanking{},
 	//	&DoubanMovieTop250{}, &DoubanMovieNowshowing{}, &DoubanMovieComingsoon{}, &DoubanBookTop250{}, &DoubanBookHottestPublish{},
 	//	&DoubanBookHottestOriginal{}, &DoubanBookHighsalesPublish{})
-	err := db.AutoMigrate(&BusinessCityWeather{})
+	err := DB.AutoMigrate(&BusinessCityWeather{})
 	if err != nil {
 		log.Write("db AutoMigrate err:", err)
 	}

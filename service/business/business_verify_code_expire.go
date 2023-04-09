@@ -6,11 +6,10 @@ import (
 )
 
 func CheckActivationCodeIsExpire(code string) bool {
-	db := mysql.Connect()
 	//查询试用激活码是否过期
 	//试用激活码
 	var businessTrialActivationCode mysql.BusinessTrialActivationCode
-	result1 := db.Where("code = ?", code).First(&businessTrialActivationCode)
+	result1 := mysql.DB.Where("code = ?", code).First(&businessTrialActivationCode)
 	if result1.RowsAffected == 1 {
 		//判断激活码是否过期
 		if time.Now().After(businessTrialActivationCode.EndDate) {
@@ -24,7 +23,7 @@ func CheckActivationCodeIsExpire(code string) bool {
 
 	//正式激活码
 	var businessRegularActivationCode mysql.BusinessRegularActivationCode
-	result2 := db.Where("code = ?", code).First(&businessRegularActivationCode)
+	result2 := mysql.DB.Where("code = ?", code).First(&businessRegularActivationCode)
 	if result2.RowsAffected == 1 {
 		//判断激活码是否过期
 		if time.Now().After(businessRegularActivationCode.EndDate) {

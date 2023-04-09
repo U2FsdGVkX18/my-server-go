@@ -135,15 +135,14 @@ func ProcessMessage(msg_signature string, timestamp string, nonce string, post_d
 			var Latitude = fmt.Sprintf("%f", msgContent.Latitude)
 			var Longitude = fmt.Sprintf("%f", msgContent.Longitude)
 			location := Latitude + ":" + Longitude
-			db := mysql.Connect()
-			result := db.Where("user_name = ?", username).First(&mysql.QywxUserLocation{})
+			result := mysql.DB.Where("user_name = ?", username).First(&mysql.QywxUserLocation{})
 			if result.RowsAffected == 1 {
 				//更新
-				db.Model(&mysql.QywxUserLocation{}).Where("user_name = ?", username).Update("user_location", location)
+				mysql.DB.Model(&mysql.QywxUserLocation{}).Where("user_name = ?", username).Update("user_location", location)
 				logger.Write("ProcessMessage 查询到用户和位置数据已存在,更新位置数据:", username)
 			} else {
 				//插入
-				db.Create(&mysql.QywxUserLocation{
+				mysql.DB.Create(&mysql.QywxUserLocation{
 					UserName:     username,
 					UserLocation: location,
 				})

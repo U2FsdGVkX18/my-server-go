@@ -18,11 +18,10 @@ const (
 )
 
 func CheckActivationCode(code string) Status {
-	db := mysql.Connect()
 	//查询试用激活码是否存在
 	//试用激活码
 	var businessTrialActivationCode mysql.BusinessTrialActivationCode
-	result1 := db.Where("code = ?", code).First(&businessTrialActivationCode)
+	result1 := mysql.DB.Where("code = ?", code).First(&businessTrialActivationCode)
 	if result1.RowsAffected == 1 {
 		//判断激活码是否被使用
 		if !businessTrialActivationCode.IsUsed {
@@ -34,7 +33,7 @@ func CheckActivationCode(code string) Status {
 			//插入过期时间
 			businessTrialActivationCode.EndDate = time.Now().AddDate(0, 0, 1)
 			//更新数据库
-			db.Save(&businessTrialActivationCode)
+			mysql.DB.Save(&businessTrialActivationCode)
 			return Inactive
 		} else {
 			//已使用
@@ -44,7 +43,7 @@ func CheckActivationCode(code string) Status {
 
 	//正式激活码
 	var businessRegularActivationCode mysql.BusinessRegularActivationCode
-	result2 := db.Where("code = ?", code).First(&businessRegularActivationCode)
+	result2 := mysql.DB.Where("code = ?", code).First(&businessRegularActivationCode)
 	if result2.RowsAffected == 1 {
 		if !businessRegularActivationCode.IsUsed {
 			//标记为已使用
@@ -54,7 +53,7 @@ func CheckActivationCode(code string) Status {
 			//插入过期时间
 			businessRegularActivationCode.EndDate = time.Now().AddDate(50, 0, 0)
 			//更新数据库
-			db.Save(&businessRegularActivationCode)
+			mysql.DB.Save(&businessRegularActivationCode)
 			return Inactive
 		} else {
 			return Active

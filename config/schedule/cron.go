@@ -14,47 +14,46 @@ import (
 
 func Job() {
 	//从数据库中获取cron表达式
-	db := mysql.Connect()
 	//初始化(秒级别,并增加错误回调函数)
 	c := cron.New(cron.WithSeconds(), cron.WithChain(cron.Recover(cron.DefaultLogger)))
 	//配置定时任务1
 	var scheduled1 mysql.Scheduled
-	db.Select("cron").Where("id = ?", 1).Find(&scheduled1)
+	mysql.DB.Select("cron").Where("id = ?", 1).Find(&scheduled1)
 	_, err := c.AddJob(scheduled1.Cron, &everyMorning{})
 	if err != nil {
 		logger.Write("EveryMorning定时任务执行err", err)
 	}
 	//配置定时任务2
 	var scheduled2 mysql.Scheduled
-	db.Select("cron").Where("id = ?", 2).Find(&scheduled2)
+	mysql.DB.Select("cron").Where("id = ?", 2).Find(&scheduled2)
 	_, err = c.AddJob(scheduled2.Cron, &everyHour{})
 	if err != nil {
 		logger.Write("EveryHour定时任务执行err", err)
 	}
 	//配置定时任务3
 	var scheduled3 mysql.Scheduled
-	db.Select("cron").Where("id = ?", 3).Find(&scheduled3)
+	mysql.DB.Select("cron").Where("id = ?", 3).Find(&scheduled3)
 	_, err = c.AddJob(scheduled3.Cron, &everyNight{})
 	if err != nil {
 		logger.Write("EveryNight定时任务执行err", err)
 	}
 	//配置定时任务4
 	var scheduled4 mysql.Scheduled
-	db.Select("cron").Where("id = ?", 4).Find(&scheduled4)
+	mysql.DB.Select("cron").Where("id = ?", 4).Find(&scheduled4)
 	_, err = c.AddJob(scheduled4.Cron, &everyDayZero{})
 	if err != nil {
 		logger.Write("EveryDayZero定时任务执行err", err)
 	}
 	//配置定时任务5
 	var scheduled5 mysql.Scheduled
-	db.Select("cron").Where("id = ?", 5).Find(&scheduled5)
+	mysql.DB.Select("cron").Where("id = ?", 5).Find(&scheduled5)
 	_, err = c.AddJob(scheduled5.Cron, &everyWeekOne{})
 	if err != nil {
 		logger.Write("EveryWeekZero定时任务执行err", err)
 	}
 	//配置定时任务6
 	var scheduled6 mysql.Scheduled
-	db.Select("cron").Where("id = ?", 6).Find(&scheduled6)
+	mysql.DB.Select("cron").Where("id = ?", 6).Find(&scheduled6)
 	_, err = c.AddJob(scheduled6.Cron, &everyMonthTwo{})
 	if err != nil {
 		logger.Write("EveryMonthZero定时任务执行err", err)

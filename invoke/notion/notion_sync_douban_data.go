@@ -21,12 +21,11 @@ const notionBotKey = "secret_rvUNRXh5Imw1WmOudXxcOaF6yakOkXVSn3LuJg5uLrv"
 const notionVersion = "2022-06-28"
 
 func SyncNewMovieRanking() {
-	db := mysql.Connect()
 	dataBaseId := "7ec1b96bd47f4c5c86fab914c24b3c73"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanNewmovieRankings []mysql.DoubanNewmovieRanking
-	db.Select("id,name,intro,score,score_people,details,img_url,created_at").Find(&doubanNewmovieRankings)
+	mysql.DB.Select("id,name,intro,score,score_people,details,img_url,created_at").Find(&doubanNewmovieRankings)
 	for _, doubanNewmovieRanking := range doubanNewmovieRankings {
 		var id = ID{Number: doubanNewmovieRanking.ID}
 		var name = Name{Title: GetTitle(doubanNewmovieRanking.Name)}
@@ -77,12 +76,11 @@ func SyncNewMovieRanking() {
 }
 
 func SyncMovieNowShowing() {
-	db := mysql.Connect()
 	dataBaseId := "3cf8045ba71b45099edc805fee5bcac6"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanMovieNowshowings []mysql.DoubanMovieNowshowing
-	db.Select("id,name,score,score_people,`release`,duration,region,director,actors,details,img_url,created_at").Find(&doubanMovieNowshowings)
+	mysql.DB.Select("id,name,score,score_people,`release`,duration,region,director,actors,details,img_url,created_at").Find(&doubanMovieNowshowings)
 	for _, doubanMovieNowshowing := range doubanMovieNowshowings {
 		var id = ID{Number: doubanMovieNowshowing.ID}
 		var name = Name{Title: GetTitle(doubanMovieNowshowing.Name)}
@@ -141,12 +139,11 @@ func SyncMovieNowShowing() {
 }
 
 func SyncMovieComingSoon() {
-	db := mysql.Connect()
 	dataBaseId := "2ba22a88135147ef9ed6d9df0bfc4243"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanMovieComingsoons []mysql.DoubanMovieComingsoon
-	db.Select("id,name,region,release_date,type,want_to_see,details,img_url,created_at").Find(&doubanMovieComingsoons)
+	mysql.DB.Select("id,name,region,release_date,type,want_to_see,details,img_url,created_at").Find(&doubanMovieComingsoons)
 	for _, doubanMovieComingsoon := range doubanMovieComingsoons {
 		var id = ID{Number: doubanMovieComingsoon.ID}
 		var name = Name{Title: GetTitle(doubanMovieComingsoon.Name)}
@@ -200,12 +197,11 @@ func SyncMovieComingSoon() {
 }
 
 func SyncTop250MovieRanking() {
-	db := mysql.Connect()
 	dataBaseId := "27fd20d5025b48189b93b4a7f00aed5d"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanMovieTop250s []mysql.DoubanMovieTop250
-	db.Select("id,name,score,score_people,director_and_actors,year_and_region_and_type,quote,details,img_url,created_at").Find(&doubanMovieTop250s)
+	mysql.DB.Select("id,name,score,score_people,director_and_actors,year_and_region_and_type,quote,details,img_url,created_at").Find(&doubanMovieTop250s)
 	for _, doubanMovieTop250 := range doubanMovieTop250s {
 		var id = ID{Number: doubanMovieTop250.ID}
 		var name = Name{Title: GetTitle(doubanMovieTop250.Name)}
@@ -261,12 +257,11 @@ func SyncTop250MovieRanking() {
 }
 
 func SyncHighScoreTVShowRanking() {
-	db := mysql.Connect()
 	dataBaseId := "950264e99ab744968a7ea046d23f8423"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanTvshowHighscores []mysql.DoubanTvshowHighscore
-	db.Select("id,name,score,score_people,subtitle,type,year,tags,hot_comment,details,img_url,created_at").Find(&doubanTvshowHighscores)
+	mysql.DB.Select("id,name,score,score_people,subtitle,type,year,tags,hot_comment,details,img_url,created_at").Find(&doubanTvshowHighscores)
 	for _, doubanTvshowHighscore := range doubanTvshowHighscores {
 		var id = ID{Number: doubanTvshowHighscore.ID}
 		var name = Name{Title: GetTitle(doubanTvshowHighscore.Name)}
@@ -326,12 +321,11 @@ func SyncHighScoreTVShowRanking() {
 }
 
 func SyncTop250BookRanking() {
-	db := mysql.Connect()
 	dataBaseId := "10f0c3cf30054e91bd4b52f7efb62c2b"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanBookTop250s []mysql.DoubanBookTop250
-	db.Select("id,name,score,score_people,author_press_publication_price,quote,details,img_url,created_at").Find(&doubanBookTop250s)
+	mysql.DB.Select("id,name,score,score_people,author_press_publication_price,quote,details,img_url,created_at").Find(&doubanBookTop250s)
 	for _, doubanBookTop250 := range doubanBookTop250s {
 		var id = ID{Number: doubanBookTop250.ID}
 		var name = Name{Title: GetTitle(doubanBookTop250.Name)}
@@ -385,12 +379,11 @@ func SyncTop250BookRanking() {
 }
 
 func SyncHotTestPublishBookRanking() {
-	db := mysql.Connect()
 	dataBaseId := "def123f5c0da41c4a7e8b402175ef570"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanBookHottestPublishs []mysql.DoubanBookHottestPublish
-	db.Select("id,name,author,orig_author,translator,summary,kinds,word_count,fixed_price,sales_price,details,img_url,created_at").Find(&doubanBookHottestPublishs)
+	mysql.DB.Select("id,name,author,orig_author,translator,summary,kinds,word_count,fixed_price,sales_price,details,img_url,created_at").Find(&doubanBookHottestPublishs)
 	for _, doubanBookHottestPublish := range doubanBookHottestPublishs {
 		var id = ID{Number: doubanBookHottestPublish.ID}
 		var name = Name{Title: GetTitle(doubanBookHottestPublish.Name)}
@@ -452,12 +445,11 @@ func SyncHotTestPublishBookRanking() {
 }
 
 func SyncHighSalesPublishBookRanking() {
-	db := mysql.Connect()
 	dataBaseId := "ffd04fb305614488a31c6b460bd0e2df"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanBookHighsalesPublishs []mysql.DoubanBookHighsalesPublish
-	db.Select("id,name,author,orig_author,translator,summary,kinds,word_count,fixed_price,sales_price,details,img_url,created_at").Find(&doubanBookHighsalesPublishs)
+	mysql.DB.Select("id,name,author,orig_author,translator,summary,kinds,word_count,fixed_price,sales_price,details,img_url,created_at").Find(&doubanBookHighsalesPublishs)
 	for _, doubanBookHighsalesPublish := range doubanBookHighsalesPublishs {
 		var id = ID{Number: doubanBookHighsalesPublish.ID}
 		var name = Name{Title: GetTitle(doubanBookHighsalesPublish.Name)}
@@ -519,12 +511,11 @@ func SyncHighSalesPublishBookRanking() {
 }
 
 func SyncHotTestOriginalBookRanking() {
-	db := mysql.Connect()
 	dataBaseId := "c3b034d6598645d0bc87e1d12c4aecd7"
 	pageUrl := notionBasicApi + "/pages"
 	DeleteDataBaseData(dataBaseId)
 	var doubanBookHottestOriginals []mysql.DoubanBookHottestOriginal
-	db.Select("id,name,author,orig_author,translator,summary,kinds,word_count,fixed_price,sales_price,details,img_url,created_at").Find(&doubanBookHottestOriginals)
+	mysql.DB.Select("id,name,author,orig_author,translator,summary,kinds,word_count,fixed_price,sales_price,details,img_url,created_at").Find(&doubanBookHottestOriginals)
 	for _, doubanBookHottestOriginal := range doubanBookHottestOriginals {
 		var id = ID{Number: doubanBookHottestOriginal.ID}
 		var name = Name{Title: GetTitle(doubanBookHottestOriginal.Name)}

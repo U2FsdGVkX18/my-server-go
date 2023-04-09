@@ -7,21 +7,25 @@ import (
 	"time"
 )
 
-var ctx = context.Background()
+var (
+	Client *redis.Client
+	ctx    = context.Background()
+)
 
-func Connect() *redis.Client {
+func init() {
+	Connect()
+}
 
-	rdb := redis.NewClient(&redis.Options{
+func Connect() {
+	Client = redis.NewClient(&redis.Options{
 		Addr:     "125.91.35.185:6379",
 		Password: "mujin1110",
 		DB:       0,
 	})
-	return rdb
 }
 
 func GetValue(key string) string {
-	rdb := Connect()
-	result, err := rdb.Get(ctx, key).Result()
+	result, err := Client.Get(ctx, key).Result()
 	if err != nil {
 		logger.Write("GetValue redis获取值错误或为空值:", err)
 		return ""
@@ -30,8 +34,7 @@ func GetValue(key string) string {
 }
 
 func SetValue(key string, value any, expiration time.Duration) {
-	rdb := Connect()
-	err := rdb.Set(ctx, key, value, expiration).Err()
+	err := Client.Set(ctx, key, value, expiration).Err()
 	if err != nil {
 		logger.Write("SetValue redis设置值错误:", err)
 	}

@@ -37,7 +37,6 @@ func Test4(t *testing.T) {
 }
 
 func Test5(t *testing.T) {
-	db := mysql.Connect()
 	//var qywx mysql.QywxUserLocation
 	//result := db.Where("user_name", "lihongwei").First(&mysql.QywxUserLocation{})
 	//result := db.Where("user_name", "LiHongWei").Find(&mysql.QywxUserLocation{})
@@ -50,7 +49,7 @@ func Test5(t *testing.T) {
 	//	UserName:     "lihongwei",
 	//	UserLocation: "location",
 	//})
-	result := db.Model(&mysql.QywxUserLocation{}).Where("user_name", "LiHongWei").Update("user_location", "asdasd")
+	result := mysql.DB.Model(&mysql.QywxUserLocation{}).Where("user_name", "LiHongWei").Update("user_location", "asdasd")
 
 	//result := db.Where("user_name", "lihongwei").Update("user_location", "1211111:22")
 	fmt.Println(result.RowsAffected)
@@ -78,7 +77,7 @@ func Test9(t *testing.T) {
 	//redis.SetValue("key", "token", 7200*1000*time.Millisecond)
 	//value := redis.GetValue("wxAccessToken")
 	//fmt.Println(value)
-	redis.SetValue("wxAccessToken", "123", 7200*1000*1000)
+	//redis.SetValue("wxAccessToken", "123", 7200*1000*1000)
 	value := redis.GetValue("wxAccessToken")
 
 	fmt.Println("redis:", value)
@@ -95,22 +94,20 @@ func Test11(t *testing.T) {
 }
 
 func Test12(t *testing.T) {
-	db := mysql.Connect()
 	var scheduled mysql.Scheduled
 	//var cron string
 	//db.Select("Cron").Where("id = ?", 1).First(&sch).Scan(&cron)
-	db.Select("cron").Where("id = ?", 1).Find(&scheduled)
+	mysql.DB.Select("cron").Where("id = ?", 1).Find(&scheduled)
 	//db.Select("Cron").Where("id = ?", 1).First(&mysql.Scheduled{}).Scan(&cron)
 	fmt.Println(scheduled.Type)
 }
 
 func Test13(t *testing.T) {
 	//notion.SyncMovieNowShowing()
-	db := mysql.Connect()
 	//db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", "business_city_weathers"))
 	//var cityName string
 	var businesslist []mysql.BusinessCityWeather
-	db.Model(&mysql.BusinessCityWeather{}).Select("city_name,weather_now,created_at").
+	mysql.DB.Model(&mysql.BusinessCityWeather{}).Select("city_name,weather_now,created_at").
 		Where("city_id = ? AND weather_now LIKE ?", "WX38NPJ1DP88", "%雨%").
 		Order("created_at DESC").Find(&businesslist)
 	//Limit(1).Scan(&cityName)
@@ -118,7 +115,6 @@ func Test13(t *testing.T) {
 	//business.GetAllCityWeatherInsertDB()
 }
 func Test14(t *testing.T) {
-	//db := mysql.Connect()
 	//type Result struct {
 	//	Area     string
 	//	Province string
@@ -149,7 +145,6 @@ func Test14(t *testing.T) {
 }
 
 func Test15(t *testing.T) {
-	//db := mysql.Connect()
 	//mysql.CreateTables()
 
 	//status := business2.CheckActivationCodeIsExpire("33e032e2-e498-4db6-9ed8-a012613f884e")

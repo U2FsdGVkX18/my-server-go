@@ -17,8 +17,7 @@ import (
 func GetNewMovieRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_newmovie_rankings"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	url := "https://movie.douban.com/chart"
 	resp := invoke.SendGet(url, nil, GetHeader())
@@ -52,7 +51,7 @@ func GetNewMovieRanking() {
 			Score:       score,
 			ScorePeople: uint(parseUint),
 		}
-		db.Create(&douBanDataMovieRanking)
+		mysql.DB.Create(&douBanDataMovieRanking)
 	})
 	logger.Write("getNewMovieRanking 豆瓣新片电影排行数据爬取完成")
 }
@@ -60,8 +59,7 @@ func GetNewMovieRanking() {
 func GetMovieNowShowing() {
 	//清空表的数据,重新插入
 	tableName := "douban_movie_nowshowings"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	url := "https://movie.douban.com/cinema/nowplaying/hangzhou/"
 	resp := invoke.SendGet(url, nil, GetHeader())
@@ -98,7 +96,7 @@ func GetMovieNowShowing() {
 			Details:     details,
 			ImgUrl:      imgUrl,
 		}
-		db.Create(&doubanMovieNowshowing)
+		mysql.DB.Create(&doubanMovieNowshowing)
 	})
 	logger.Write("GetMovieNowShowing 豆瓣电影正在上映数据爬取完成")
 }
@@ -106,8 +104,7 @@ func GetMovieNowShowing() {
 func GetMovieComingSoon() {
 	//清空表的数据,重新插入
 	tableName := "douban_movie_comingsoons"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	url := "https://movie.douban.com/cinema/later/hangzhou/"
 	resp := invoke.SendGet(url, nil, GetHeader())
@@ -139,7 +136,7 @@ func GetMovieComingSoon() {
 			Region:      region,
 			WantToSee:   wantToSee,
 		}
-		db.Create(&doubanMovieComingsoon)
+		mysql.DB.Create(&doubanMovieComingsoon)
 	})
 	logger.Write("GetMovieComingSoon 豆瓣电影即将上映数据爬取完成")
 }
@@ -147,8 +144,7 @@ func GetMovieComingSoon() {
 func GetTop250MovieRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_movie_top250"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	for i := 0; i <= 225; i += 25 {
 		url := "https://movie.douban.com/top250?start=" + strconv.Itoa(i) + "&filter="
@@ -189,7 +185,7 @@ func GetTop250MovieRanking() {
 				ScorePeople:          uint(parseUint),
 				Quote:                quote,
 			}
-			db.Create(&doubanMovieTop250)
+			mysql.DB.Create(&doubanMovieTop250)
 		})
 		logger.Write("GetTop250MovieRanking 豆瓣TOP250第" + strconv.Itoa(i/25+1) + "页电影数据爬取完成")
 	}
@@ -198,8 +194,7 @@ func GetTop250MovieRanking() {
 func GetHighScoreTVShowRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_tvshow_highscores"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	for i := 0; i <= 180; i += 20 {
 		url := "https://m.douban.com/rexxar/api/v2/tv/recommend?refresh=0&start=" + strconv.Itoa(i) + "&count=20&selected_categories=%7B%7D&uncollect=false&sort=S&tags="
@@ -238,7 +233,7 @@ func GetHighScoreTVShowRanking() {
 				Details:     "https://www.douban.com/doubanapp/dispatch?uri=/tv/" + id,
 				ImgUrl:      imgUrl,
 			}
-			db.Create(&doubanTvshowHighscore)
+			mysql.DB.Create(&doubanTvshowHighscore)
 		}
 		logger.Write("GetHighScoreTVShowRanking 豆瓣高分电视剧第" + strconv.Itoa(i/20+1) + "页数据爬取完成")
 	}
@@ -247,8 +242,7 @@ func GetHighScoreTVShowRanking() {
 func GetTop250BookRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_book_top250"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	for i := 0; i <= 225; i += 25 {
 		url := "https://book.douban.com/top250?start=" + strconv.Itoa(i)
@@ -285,7 +279,7 @@ func GetTop250BookRanking() {
 				ScorePeople:                 uint(parseUint),
 				Quote:                       quote,
 			}
-			db.Create(&doubanBookTop250)
+			mysql.DB.Create(&doubanBookTop250)
 		})
 		logger.Write("GetTop250BookRanking 豆瓣TOP250第" + strconv.Itoa(i/25+1) + "页读书数据爬取完成")
 	}
@@ -294,8 +288,7 @@ func GetTop250BookRanking() {
 func GetHotTestPublishBookRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_book_hottest_publishes"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	for i := 1; i <= 25; i++ {
 		url := "https://read.douban.com/j/kind/"
@@ -348,7 +341,7 @@ func GetHotTestPublishBookRanking() {
 				Details:    details,
 				ImgUrl:     imgUrl,
 			}
-			db.Create(&doubanBookHottestPublish)
+			mysql.DB.Create(&doubanBookHottestPublish)
 		}
 		logger.Write("GetHotTestPublishBookRanking 豆瓣出版书籍中热度最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
@@ -357,8 +350,7 @@ func GetHotTestPublishBookRanking() {
 func GetHighSalesPublishBookRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_book_highsales_publishes"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	for i := 1; i <= 25; i++ {
 		url := "https://read.douban.com/j/kind/"
@@ -411,7 +403,7 @@ func GetHighSalesPublishBookRanking() {
 				Details:    details,
 				ImgUrl:     imgUrl,
 			}
-			db.Create(&doubanBookHighsalesPublish)
+			mysql.DB.Create(&doubanBookHighsalesPublish)
 		}
 		logger.Write("GetHighSalesPublishBookRanking 豆瓣出版书籍中销量最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}
@@ -420,8 +412,7 @@ func GetHighSalesPublishBookRanking() {
 func GetHotTestOriginalBookRanking() {
 	//清空表的数据,重新插入
 	tableName := "douban_book_hottest_originals"
-	db := mysql.Connect()
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 	//请求数据
 	for i := 1; i <= 25; i++ {
 		url := "https://read.douban.com/j/kind/"
@@ -474,7 +465,7 @@ func GetHotTestOriginalBookRanking() {
 				Details:    details,
 				ImgUrl:     imgUrl,
 			}
-			db.Create(&doubanBookHottestOriginal)
+			mysql.DB.Create(&doubanBookHottestOriginal)
 		}
 		logger.Write("GetHotTestOriginalBookRanking 豆瓣原创书籍中热度最高排行第" + strconv.Itoa(i) + "页数据爬取成功")
 	}

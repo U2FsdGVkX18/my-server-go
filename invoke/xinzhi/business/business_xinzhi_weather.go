@@ -19,18 +19,17 @@ const basicUrl = "https://api.seniverse.com/v3"
 
 // GetAllCityWeatherInsertDB GetAllCityWeather 获取每个城市的天气数据插入并插入到数据库中
 func GetAllCityWeatherInsertDB() {
-	db := mysql.Connect()
 	//清空表的数据,重新插入
 	tableName := "business_city_weathers"
-	db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
+	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
 
 	var businessCityList []mysql.BusinessCityList
-	db.Select("city_id,area,province,city_name").Find(&businessCityList)
+	mysql.DB.Select("city_id,area,province,city_name").Find(&businessCityList)
 	for _, v := range businessCityList {
 		time.Sleep(3 * time.Second)
 		weatherNow, err := GetWeatherNow(v.CityId)
 		if err != nil {
-			db.Create(&mysql.BusinessCityWeather{
+			mysql.DB.Create(&mysql.BusinessCityWeather{
 				Area:     v.Area,
 				Province: v.Province,
 				CityName: v.CityName,
@@ -38,7 +37,7 @@ func GetAllCityWeatherInsertDB() {
 			logger.Write("GetAllCityWeather:", v.CityName, err)
 			continue
 		} else {
-			db.Create(&mysql.BusinessCityWeather{
+			mysql.DB.Create(&mysql.BusinessCityWeather{
 				CityId:         v.CityId,
 				Area:           v.Area,
 				Province:       v.Province,

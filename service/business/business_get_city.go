@@ -17,13 +17,12 @@ type Result struct {
 
 // GetRainCityForMysql 从DB中获取正在下雨的城市并插入redis
 func GetRainCityForMysql() {
-	db := mysql.Connect()
 	var businessCityList []mysql.BusinessCityList
-	db.Select("city_id").Find(&businessCityList)
+	mysql.DB.Select("city_id").Find(&businessCityList)
 	var citys []Result
 	for _, v := range businessCityList {
 		var result Result
-		err := db.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
+		err := mysql.DB.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
 			Where("city_id = ? AND weather_now LIKE ?", v.CityId, "%雨%").
 			Limit(1).Scan(&result).Error
 		if err != nil {

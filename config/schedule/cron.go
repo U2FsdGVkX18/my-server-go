@@ -17,44 +17,44 @@ func Job() {
 	//初始化(秒级别,并增加错误回调函数)
 	c := cron.New(cron.WithSeconds(), cron.WithChain(cron.Recover(cron.DefaultLogger)))
 	//配置定时任务1
-	var scheduled1 mysql.Scheduled
-	mysql.DB.Select("cron").Where("id = ?", 1).Find(&scheduled1)
-	_, err := c.AddJob(scheduled1.Cron, &everyMorning{})
+	var cron1 string
+	mysql.DB.Model(mysql.Scheduled{}).Select("cron").Where("id = ?", 1).Limit(1).Scan(&cron1)
+	_, err := c.AddJob(cron1, &everyMorning{})
 	if err != nil {
 		logger.Write("EveryMorning定时任务执行err", err)
 	}
 	//配置定时任务2
-	var scheduled2 mysql.Scheduled
-	mysql.DB.Select("cron").Where("id = ?", 2).Find(&scheduled2)
-	_, err = c.AddJob(scheduled2.Cron, &everyHour{})
+	var cron2 string
+	mysql.DB.Model(mysql.Scheduled{}).Select("cron").Where("id = ?", 2).Limit(1).Scan(&cron2)
+	_, err = c.AddJob(cron2, &everyHour{})
 	if err != nil {
 		logger.Write("EveryHour定时任务执行err", err)
 	}
 	//配置定时任务3
-	var scheduled3 mysql.Scheduled
-	mysql.DB.Select("cron").Where("id = ?", 3).Find(&scheduled3)
-	_, err = c.AddJob(scheduled3.Cron, &everyNight{})
+	var cron3 string
+	mysql.DB.Model(mysql.Scheduled{}).Select("cron").Where("id = ?", 3).Limit(1).Scan(&cron3)
+	_, err = c.AddJob(cron3, &everyNight{})
 	if err != nil {
 		logger.Write("EveryNight定时任务执行err", err)
 	}
 	//配置定时任务4
-	var scheduled4 mysql.Scheduled
-	mysql.DB.Select("cron").Where("id = ?", 4).Find(&scheduled4)
-	_, err = c.AddJob(scheduled4.Cron, &everyDayZero{})
+	var cron4 string
+	mysql.DB.Model(mysql.Scheduled{}).Select("cron").Where("id = ?", 4).Limit(1).Scan(&cron4)
+	_, err = c.AddJob(cron4, &everyDayZero{})
 	if err != nil {
 		logger.Write("EveryDayZero定时任务执行err", err)
 	}
 	//配置定时任务5
-	var scheduled5 mysql.Scheduled
-	mysql.DB.Select("cron").Where("id = ?", 5).Find(&scheduled5)
-	_, err = c.AddJob(scheduled5.Cron, &everyWeekOne{})
+	var cron5 string
+	mysql.DB.Model(mysql.Scheduled{}).Select("cron").Where("id = ?", 5).Limit(1).Scan(&cron5)
+	_, err = c.AddJob(cron5, &everyWeekOne{})
 	if err != nil {
 		logger.Write("EveryWeekZero定时任务执行err", err)
 	}
 	//配置定时任务6
-	var scheduled6 mysql.Scheduled
-	mysql.DB.Select("cron").Where("id = ?", 6).Find(&scheduled6)
-	_, err = c.AddJob(scheduled6.Cron, &everyMonthTwo{})
+	var cron6 string
+	mysql.DB.Model(mysql.Scheduled{}).Select("cron").Where("id = ?", 6).Limit(1).Scan(&cron6)
+	_, err = c.AddJob(cron6, &everyMonthTwo{})
 	if err != nil {
 		logger.Write("EveryMonthZero定时任务执行err", err)
 	}

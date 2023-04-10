@@ -17,13 +17,16 @@ type Result struct {
 
 // GetRainCityForMysql 从DB中获取正在下雨的城市并插入redis
 func GetRainCityForMysql() {
-	var businessCityList []mysql.BusinessCityList
-	mysql.DB.Select("city_id").Find(&businessCityList)
+	var cityIds []string
+	err := mysql.DB.Model(mysql.BusinessCityList{}).Select("city_id").Scan(&cityIds).Error
+	if err != nil {
+		logger.Write("GetRainCityForMysql:", err)
+	}
 	var citys []Result
-	for _, v := range businessCityList {
+	for _, v := range cityIds {
 		var result Result
 		err := mysql.DB.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
-			Where("city_id = ? AND weather_now LIKE ?", v.CityId, "%雨%").
+			Where("city_id = ? AND weather_now LIKE ?", v, "%雨%").
 			Limit(1).Scan(&result).Error
 		if err != nil {
 			logger.Write(err)
@@ -41,7 +44,7 @@ func GetRainCityForMysql() {
 	logger.Write("businessRainCity数据写入redis完成")
 }
 
-// GetRainCityForRedis 从redis中获取正在下雨的城市并返回给接口
+// GetRainCityForRedis 接口调用,从redis中获取正在下雨的城市并返回给接口
 func GetRainCityForRedis() []Result {
 	value := redis.GetValue("businessRainCity")
 	data := make([]Result, 0)

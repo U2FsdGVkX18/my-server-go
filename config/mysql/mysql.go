@@ -37,14 +37,14 @@ func Connect() *gorm.DB {
 }
 
 type Scheduled struct {
-	ID       uint   `gorm:"primarykey"`
+	ID       uint   `gorm:"primaryKey"`
 	CronMean string `gorm:"type:varchar(255);comment:cron表达式含义"`
 	Cron     string `gorm:"type:varchar(255);comment:cron表达式"`
 	Type     string `gorm:"type:varchar(255)"`
 }
 
 type QywxUserLocation struct {
-	ID           uint      `gorm:"primarykey"`
+	ID           uint      `gorm:"primaryKey"`
 	UserName     string    `gorm:"type:varchar(255);comment:企业成员微信用户名"`
 	UserLocation string    `gorm:"type:varchar(255);comment:企业成员定位地址纬度+经度"`
 	Location     string    `gorm:"type:varchar(255);comment:企业成员定位地址"`
@@ -53,7 +53,7 @@ type QywxUserLocation struct {
 }
 
 type DoubanTvshowHighscore struct {
-	ID          uint      `gorm:"primarykey"`
+	ID          uint      `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255);comment:tv名称"`
 	Subtitle    string    `gorm:"type:varchar(255);comment:副标题"`
 	Type        string    `gorm:"type:varchar(255);comment:类型"`
@@ -68,7 +68,7 @@ type DoubanTvshowHighscore struct {
 }
 
 type DoubanNewmovieRanking struct {
-	ID          uint      `gorm:"primarykey"`
+	ID          uint      `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255);comment:电影名称"`
 	Intro       string    `gorm:"type:varchar(255);comment:电影简介"`
 	Score       string    `gorm:"type:varchar(255);comment:评分"`
@@ -79,7 +79,7 @@ type DoubanNewmovieRanking struct {
 }
 
 type DoubanMovieTop250 struct {
-	ID                   uint      `gorm:"primarykey"`
+	ID                   uint      `gorm:"primaryKey"`
 	Name                 string    `gorm:"type:varchar(255);comment:电影名称"`
 	DirectorAndActors    string    `gorm:"type:varchar(255);comment:导演和演员"`
 	YearAndRegionAndType string    `gorm:"type:varchar(255);comment:年份地区类型"`
@@ -92,7 +92,7 @@ type DoubanMovieTop250 struct {
 }
 
 type DoubanMovieNowshowing struct {
-	ID          uint      `gorm:"primarykey"`
+	ID          uint      `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255);comment:电影名称"`
 	Score       string    `gorm:"type:varchar(255);comment:评分"`
 	ScorePeople uint      `gorm:"comment:评分人数"`
@@ -107,7 +107,7 @@ type DoubanMovieNowshowing struct {
 }
 
 type DoubanMovieComingsoon struct {
-	ID          uint      `gorm:"primarykey"`
+	ID          uint      `gorm:"primaryKey"`
 	Name        string    `gorm:"type:varchar(255);comment:电影名称"`
 	Region      string    `gorm:"type:varchar(255);comment:地区"`
 	ReleaseDate string    `gorm:"type:varchar(255);comment:上映日期"`
@@ -119,7 +119,7 @@ type DoubanMovieComingsoon struct {
 }
 
 type DoubanBookTop250 struct {
-	ID                          uint      `gorm:"primarykey"`
+	ID                          uint      `gorm:"primaryKey"`
 	Name                        string    `gorm:"type:varchar(255);comment:书名"`
 	AuthorPressPublicationPrice string    `gorm:"type:varchar(255);comment:作者出版社出版年定价"`
 	Score                       string    `gorm:"type:varchar(255);comment:评分"`
@@ -131,7 +131,7 @@ type DoubanBookTop250 struct {
 }
 
 type DoubanBookHottestPublish struct {
-	ID         uint      `gorm:"primarykey"`
+	ID         uint      `gorm:"primaryKey"`
 	Name       string    `gorm:"type:varchar(255);comment:书名"`
 	Author     string    `gorm:"type:varchar(1000);comment:作者"`
 	OrigAuthor string    `gorm:"type:varchar(255);comment:原创作者"`
@@ -147,7 +147,7 @@ type DoubanBookHottestPublish struct {
 }
 
 type DoubanBookHottestOriginal struct {
-	ID         uint      `gorm:"primarykey"`
+	ID         uint      `gorm:"primaryKey"`
 	Name       string    `gorm:"type:varchar(255);comment:书名"`
 	Author     string    `gorm:"type:varchar(1000);comment:作者"`
 	OrigAuthor string    `gorm:"type:varchar(255);comment:原创作者"`
@@ -163,7 +163,7 @@ type DoubanBookHottestOriginal struct {
 }
 
 type DoubanBookHighsalesPublish struct {
-	ID         uint      `gorm:"primarykey"`
+	ID         uint      `gorm:"primaryKey"`
 	Name       string    `gorm:"type:varchar(255);comment:书名"`
 	Author     string    `gorm:"type:varchar(1000);comment:作者"`
 	OrigAuthor string    `gorm:"type:varchar(255);comment:原创作者"`
@@ -179,7 +179,7 @@ type DoubanBookHighsalesPublish struct {
 }
 
 type BusinessCityList struct {
-	ID             uint   `gorm:"primarykey"`
+	ID             uint   `gorm:"primaryKey"`
 	CityId         string `gorm:"type:varchar(255);comment:城市ID"`
 	Administrative string `gorm:"type:varchar(255);comment:行政归属"`
 	Area           string `gorm:"type:varchar(255);comment:地区"`
@@ -189,7 +189,7 @@ type BusinessCityList struct {
 }
 
 type BusinessCityWeather struct {
-	ID             uint      `gorm:"primarykey"`
+	ID             uint      `gorm:"primaryKey"`
 	CityId         string    `gorm:"type:varchar(255);comment:城市ID"`
 	Area           string    `gorm:"type:varchar(255);comment:地区"`
 	Province       string    `gorm:"type:varchar(255);comment:省市"`

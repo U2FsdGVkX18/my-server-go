@@ -8,6 +8,18 @@ import (
 	logger "my-server-go/tool/log"
 )
 
+var UserLocation string
+
+func init() {
+	//获得位置信息
+	err := mysql.DB.Model(mysql.QywxUserLocation{}).
+		Select("user_location").
+		Where("user_name = ?", "LiHongWei").Limit(1).Scan(&UserLocation).Error
+	if err != nil {
+		logger.Write(err)
+	}
+}
+
 func SendMessageEveryMorning() {
 	//早安心语
 	goodMorningWords := tianxing.GoodMorningWords()
@@ -19,22 +31,18 @@ func SendMessageEveryMorning() {
 	sentenceOfTheDay := tianxing.SentenceOfTheDay()
 
 	//天气实况数据
-	//获得位置信息
-	var userLocation mysql.QywxUserLocation
-	mysql.DB.Where("user_name = ?", "LiHongWei").Find(&userLocation)
-
 	//查询天气,获取现在天气数据
-	weatherNow := xinzhi.GetWeatherNow(userLocation.UserLocation)
+	weatherNow := xinzhi.GetWeatherNow(UserLocation)
 
 	//获取逐日天气预报-今日
-	weatherDaily := xinzhi.GetWeatherDaily(userLocation.UserLocation)
+	weatherDaily := xinzhi.GetWeatherDaily(UserLocation)
 	weatherDailyToDay := weatherDaily["toDay"]
 
 	//数据更新时间
 	weatherDailyLastUpdate := weatherDaily["last_update"]
 
 	//获取生活指数
-	lifeSuggestion := xinzhi.GetLifeSuggestion(userLocation.UserLocation)
+	lifeSuggestion := xinzhi.GetLifeSuggestion(UserLocation)
 
 	//组装消息体并发送
 	var message = "【早安】" + "\n" +
@@ -74,11 +82,8 @@ func SendMessageEveryMorning() {
 }
 
 func SendMessageEveryHour() {
-	//获得位置信息
-	var userLocation mysql.QywxUserLocation
-	mysql.DB.Where("user_name = ?", "LiHongWei").Find(&userLocation)
 	//查询天气
-	weatherNow := xinzhi.GetWeatherNow(userLocation.UserLocation)
+	weatherNow := xinzhi.GetWeatherNow(UserLocation)
 
 	//消息
 	var message = "【实时天气】" + "\n" +
@@ -99,11 +104,8 @@ func SendMessageEveryHour() {
 func SendMessageEveryNight() {
 	//晚安心语
 	goodNightWords := tianxing.GoodNightWords()
-	//获得位置信息
-	var userLocation mysql.QywxUserLocation
-	mysql.DB.Where("user_name = ?", "LiHongWei").Find(&userLocation)
 	//获取逐日天气预报
-	weatherDaily := xinzhi.GetWeatherDaily(userLocation.UserLocation)
+	weatherDaily := xinzhi.GetWeatherDaily(UserLocation)
 	//明天
 	weatherDailyTomorrow := weatherDaily["tomorrow"]
 	//后天

@@ -2,149 +2,12 @@ package test
 
 import (
 	"fmt"
-	"my-server-go/api"
 	"my-server-go/config/mysql"
-	"my-server-go/config/redis"
-	"my-server-go/invoke/douban"
-	"my-server-go/invoke/tianxing"
-	"my-server-go/invoke/wx"
-	"my-server-go/invoke/xinzhi"
-	"my-server-go/service/business"
 	business2 "my-server-go/tool/business"
-	logger "my-server-go/tool/log"
 	"testing"
 )
 
-func TestOne(t *testing.T) {
-	var msg_signature = "bb65bc2127f86d862df8e6917daa7ef4a7b1733d"
-	var timestamp = "1677596202"
-	var nonce = "1676975221"
-	var data = "<xml><ToUserName><![CDATA[ww8d5186f5aa839ee7]]></ToUserName><Encrypt><![CDATA[MMs94DR1S7fGleh0mKyjA3RNgwuNNGu0YyGimD+99GB16gCpuhBkvWxaTt20L1PC6Ni0VBWnpSdlpUsWseUbFpmsRtt8aFkTdoyRBe8C0gx9hM8bLrOWGcdOJrtXaGIUnOF8H8UuinQXLjO/uAulBKLKE7TiMFXtvaQ62/Iuzc5UKdh8bAbGUk+iOY1nUkh3L5BSPpyWHWVKEFyLkumjUCWZV4L11lSuG9nqbDVVFhdHLT/Du3TCX/To4DW7DIUyjgpzARVjAPzBzGvYYe1Nq1Y3RkjbwdWRWz824xhgmYEpiUr4XOYlfqTWljydXOV+NdNmJBXc/WDnG4u2jo1HsUjYRsWzaYqux4CX3dm1WI6L9iDJB87F5Ldp90yoxuf5rBdb3xLtssxBu8S4zievwlZVzRnQWN33Xvg0fUKHjo0=]]></Encrypt><AgentID><![CDATA[1000002]]></AgentID></xml>"
-	api.ProcessMessage(msg_signature, timestamp, nonce, []byte(data))
-}
-
-func TestTwo(t *testing.T) {
-	api.CreatePassiveRespText("lihongwei", "123123123", "nonce", "1")
-}
-
-func Test3(t *testing.T) {
-	token := wx.GetAccessToken()
-	fmt.Println(token)
-}
-
-func Test4(t *testing.T) {
-	wx.SendWxMessage("2312312312")
-}
-
-func Test5(t *testing.T) {
-	//var qywx mysql.QywxUserLocation
-	//result := db.Where("user_name", "lihongwei").First(&mysql.QywxUserLocation{})
-	//result := db.Where("user_name", "LiHongWei").Find(&mysql.QywxUserLocation{})
-	//fmt.Println(result.RowsAffected)
-	//db.Create(&mysql.QywxUserLocation{
-	//	UserName:     "lihongwei",
-	//	UserLocation: "123",
-	//})
-	//db.Save(&mysql.QywxUserLocation{
-	//	UserName:     "lihongwei",
-	//	UserLocation: "location",
-	//})
-	result := mysql.DB.Model(&mysql.QywxUserLocation{}).Where("user_name", "LiHongWei").Update("user_location", "asdasd")
-
-	//result := db.Where("user_name", "lihongwei").Update("user_location", "1211111:22")
-	fmt.Println(result.RowsAffected)
-}
-
-func Test6(t *testing.T) {
-
-	daily := xinzhi.GetWeatherDaily("30.292601:120.039001")
-	for k, v := range daily {
-		fmt.Println(k, v)
-	}
-
-}
-
-func Test7(t *testing.T) {
-	str := tianxing.Holidays()
-	fmt.Println(str)
-}
-
-func Test8(t *testing.T) {
-	douban.GetHighScoreTVShowRanking()
-}
-
-func Test9(t *testing.T) {
-	//redis.SetValue("key", "token", 7200*1000*time.Millisecond)
-	//value := redis.GetValue("wxAccessToken")
-	//fmt.Println(value)
-	//redis.SetValue("wxAccessToken", "123", 7200*1000*1000)
-	value := redis.GetValue("wxAccessToken")
-
-	fmt.Println("redis:", value)
-}
-
-func Test10(t *testing.T) {
-	//wx2.SendMessageEveryMorning()
-	logger.Write("123123123")
-}
-
-func Test11(t *testing.T) {
-	mysql.CreateTables()
-
-}
-
-func Test12(t *testing.T) {
-	var scheduled mysql.Scheduled
-	//var cron string
-	//db.Select("Cron").Where("id = ?", 1).First(&sch).Scan(&cron)
-	mysql.DB.Select("cron").Where("id = ?", 1).Find(&scheduled)
-	//db.Select("Cron").Where("id = ?", 1).First(&mysql.Scheduled{}).Scan(&cron)
-	fmt.Println(scheduled.Type)
-}
-
-func Test13(t *testing.T) {
-	//notion.SyncMovieNowShowing()
-	//db.Exec(fmt.Sprintf("TRUNCATE TABLE %s", "business_city_weathers"))
-	//var cityName string
-	var businesslist []mysql.BusinessCityWeather
-	mysql.DB.Model(&mysql.BusinessCityWeather{}).Select("city_name,weather_now,created_at").
-		Where("city_id = ? AND weather_now LIKE ?", "WX38NPJ1DP88", "%雨%").
-		Order("created_at DESC").Find(&businesslist)
-	//Limit(1).Scan(&cityName)
-	fmt.Println(businesslist)
-	//business.GetAllCityWeatherInsertDB()
-}
-func Test14(t *testing.T) {
-	//type Result struct {
-	//	Area     string
-	//	Province string
-	//	CityName string
-	//}
-	//var result Result
-	//var citys []Result
-	//err := db.Model(&mysql.BusinessCityWeather{}).Select("area,province,city_name").
-	//	Where("city_id = ? AND weather_now LIKE ?", "W7MHXVJCW6NC", "%雨%").
-	//	Limit(1).Scan(&result).Error
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-	//citys = append(citys, result)
-	//fmt.Println(citys)
-	//marshal, _ := json.Marshal(citys)
-	//fmt.Println(string(marshal))
-	//redis.SetValue("businessRainCity1", marshal, 60*1000*time.Millisecond)
-	//value := redis.GetValue("businessRainCity1")
-	//fmt.Println(value)
-	//data := make([]Result, 0)
-	//json.Unmarshal([]byte(value), &data)
-
-	//fmt.Println(data)
-
-	//business.GetRainCityForMysql()
-	business.GetRainCityForRedis()
-}
-
-func Test15(t *testing.T) {
+func Test1(t *testing.T) {
 	//mysql.CreateTables()
 
 	//status := business2.CheckActivationCodeIsExpire("33e032e2-e498-4db6-9ed8-a012613f884e")
@@ -152,7 +15,7 @@ func Test15(t *testing.T) {
 	type Status int
 	const (
 		// Active 已激活
-		Active int = iota
+		Active Status = iota
 		// Inactive 未激活
 		Inactive
 		// Invalid 无效
@@ -167,4 +30,12 @@ func TestGenCode(t *testing.T) {
 	business2.TrialActivationCodeInsertDB()
 	//正式
 	//business2.RegularActivationCodeInsertDB()
+}
+
+func Test3(t *testing.T) {
+	var cityIds []string
+	mysql.DB.Model(mysql.BusinessCityList{}).Select("city_id").Scan(&cityIds)
+	for _, v := range cityIds {
+		fmt.Println(v)
+	}
 }

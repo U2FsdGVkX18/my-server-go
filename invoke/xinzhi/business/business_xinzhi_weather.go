@@ -17,15 +17,25 @@ const apiSecretKey = "SVb6HuTfbwzu0pNrK"
 // API
 const basicUrl = "https://api.seniverse.com/v3"
 
+// Result 定义查询数据库部分字段的结构体
+type Result struct {
+	CityId   string
+	Area     string
+	Province string
+	CityName string
+}
+
 // GetAllCityWeatherInsertDB GetAllCityWeather 获取每个城市的天气数据插入并插入到数据库中
 func GetAllCityWeatherInsertDB() {
 	//清空表的数据,重新插入
 	tableName := "business_city_weathers"
 	mysql.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %s", tableName))
-
-	var businessCityList []mysql.BusinessCityList
-	mysql.DB.Select("city_id,area,province,city_name").Find(&businessCityList)
-	for _, v := range businessCityList {
+	var result []Result
+	err := mysql.DB.Model(mysql.BusinessCityList{}).Select("city_id,area,province,city_name").Scan(&result).Error
+	if err != nil {
+		logger.Write("GetAllCityWeatherInsertDB:", err)
+	}
+	for _, v := range result {
 		time.Sleep(3 * time.Second)
 		weatherNow, err := GetWeatherNow(v.CityId)
 		if err != nil {

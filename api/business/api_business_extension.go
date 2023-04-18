@@ -21,6 +21,10 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
+type Suggestion struct {
+	Suggestion string `json:"suggestion"`
+}
+
 func ExtensionInterface(ginServer *gin.Engine) {
 	ginServer.Use(CORSMiddleware())
 	var businessGroup = ginServer.Group("/business")
@@ -55,6 +59,22 @@ func ExtensionInterface(ginServer *gin.Engine) {
 				context.JSON(http.StatusOK, gin.H{"status": true})
 				return
 			}
+		})
+		businessGroup.POST("/suggestion", func(context *gin.Context) {
+			var suggestion Suggestion
+			err := context.BindJSON(&suggestion)
+			if err != nil {
+				context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+				return
+			}
+			if len(suggestion.Suggestion) > 900 {
+				context.JSON(http.StatusBadRequest, gin.H{"error": "Suggestion length should not exceed 900 characters"})
+				return
+			}
+			logger.Write("调用suggestion接口,接收到的suggestion为:", suggestion.Suggestion)
+			business.SendEmail(suggestion.Suggestion)
+			context.JSON(http.StatusOK, gin.H{"msg": "success"})
+			return
 		})
 	}
 }

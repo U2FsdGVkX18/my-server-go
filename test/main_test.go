@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"my-server-go/config/mysql"
+	"my-server-go/service/business"
 	business2 "my-server-go/tool/business"
 	"testing"
 )
@@ -27,9 +28,9 @@ func Test1(t *testing.T) {
 // 生成激活码
 func TestGenCode(t *testing.T) {
 	//试用
-	business2.TrialActivationCodeInsertDB()
+	business2.TrialActivationCodeInsertDB(20)
 	//正式
-	//business2.RegularActivationCodeInsertDB()
+	//business2.RegularActivationCodeInsertDB(20)
 }
 
 func Test3(t *testing.T) {
@@ -38,4 +39,8 @@ func Test3(t *testing.T) {
 	for _, v := range cityIds {
 		fmt.Println(v)
 	}
+}
+
+func Test4(t *testing.T) {
+	business.SendEmail("测试")
 }

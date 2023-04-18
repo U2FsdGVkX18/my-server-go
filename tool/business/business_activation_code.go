@@ -7,9 +7,9 @@ import (
 )
 
 // TrialActivationCodeInsertDB 插入试用激活码到DB
-func TrialActivationCodeInsertDB() {
-	//生成50个
-	codes := generateBatchActivationCodes(20)
+func TrialActivationCodeInsertDB(count int) {
+	//生成个数
+	codes := generateBatchActivationCodes(count)
 	for _, code := range codes {
 		var businessTrialActivationCode = mysql.BusinessTrialActivationCode{
 			Code:      code,
@@ -22,9 +22,9 @@ func TrialActivationCodeInsertDB() {
 }
 
 // RegularActivationCodeInsertDB 插入正式激活码到DB
-func RegularActivationCodeInsertDB() {
-	//生成50个
-	codes := generateBatchActivationCodes(20)
+func RegularActivationCodeInsertDB(count int) {
+	//生成个数
+	codes := generateBatchActivationCodes(count)
 	for _, code := range codes {
 		var businessRegularActivationCode = mysql.BusinessRegularActivationCode{
 			Code:      code,

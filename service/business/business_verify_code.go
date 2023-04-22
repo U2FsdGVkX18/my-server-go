@@ -31,7 +31,7 @@ func CheckActivationCode(code string) Status {
 			//插入当前时间
 			businessTrialActivationCode.StartDate = time.Now()
 			//插入过期时间
-			businessTrialActivationCode.EndDate = time.Now().AddDate(0, 0, 1)
+			businessTrialActivationCode.EndDate = time.Now().AddDate(0, 0, 2)
 			//更新数据库
 			mysql.DB.Save(&businessTrialActivationCode)
 			return Inactive

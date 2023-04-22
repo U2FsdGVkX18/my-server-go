@@ -13,7 +13,7 @@ const from = "82008841@qq.com"
 
 const pass = "zcdmupotbdhsbifd"
 
-const to = "mister76@qq.com"
+const to = "41234641@qq.com"
 
 func SendEmail(body string) {
 	message := gomail.NewMessage()
@@ -26,5 +26,5 @@ func SendEmail(body string) {
 	if err != nil {
 		logger.Write("Error sending email:", err)
 	}
-	logger.Write("Email sent successfully!")
+	logger.Write("Email send successfully!")
 }

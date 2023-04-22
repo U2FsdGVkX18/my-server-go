@@ -28,9 +28,9 @@ func Test1(t *testing.T) {
 // 生成激活码
 func TestGenCode(t *testing.T) {
 	//试用
-	business2.TrialActivationCodeInsertDB(20)
+	business2.TrialActivationCodeInsertDB(200)
 	//正式
-	//business2.RegularActivationCodeInsertDB(20)
+	//business2.RegularActivationCodeInsertDB(100)
 }
 
 func Test3(t *testing.T) {
